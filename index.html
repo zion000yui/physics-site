@@ -134,20 +134,17 @@
   }
 
   /* Card */
-  .card, .section, .card-body, .section-body {
+  .card, .section {
     background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 18px 4px;
+    margin-bottom: 6px;
+    transition: background 0.25s;
   }
-
-  .card {
-    background: var(--bg2);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    padding: 19px 20px 16px;
-    margin-bottom: 12px;
-    transition: background 0.25s, border-color 0.25s, box-shadow 0.2s, transform 0.15s;
-  }
-  .card:active { transform: scale(0.997); }
-  .card:hover { border-color: #2f3336; box-shadow: var(--shadow); }
+  .card:active { transform: none; }
+  .card:hover { background: rgba(0,0,0,0.02); box-shadow: none; }
+  [data-theme="dark"] .card:hover { background: rgba(255,255,255,0.02); }
 
   .card-link { text-decoration: none; color: inherit; display: block; }
 
@@ -239,10 +236,12 @@
   /* Sections */
   .section { margin-top: 10px; }
   .section-title {
-    font-size: 22px;
-    font-weight: 800;
-    padding: 0 6px 10px;
-    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 6px 6px;
+    color: var(--muted);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
   }
   .section-body {
     font-size: 16px;
@@ -484,7 +483,7 @@
 
       <!-- 可继续刷的内容区 -->
       <div class="section" id="classical-mechanics">
-        <div class="section-title">📐 经典力学</div>
+        <a class="section-title" href="#classical-mechanics" style="text-decoration:none;">🟦 经典力学</a>
         <div class="section-body">
           <article class="card">
             <div class="card-header">
@@ -542,7 +541,7 @@
       </div>
 
       <div class="section" id="robotics">
-        <div class="section-title">🤖 机器人学</div>
+        <a class="section-title" href="#robotics" style="text-decoration:none;">🟦 机器人学</a>
         <div class="section-body">
           <article class="card">
             <div class="card-header">
