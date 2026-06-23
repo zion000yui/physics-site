@@ -151,6 +151,7 @@
   .section .card:hover { background: transparent; box-shadow: none; }
 
   .card-link { text-decoration: none; color: inherit; display: block; }
+  .home-cards { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }
 
   .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .card-icon {
@@ -439,6 +440,7 @@
       </section>
 
       <!-- 首页分类卡片 -->
+      <div class="home-cards">
       <a class="card card-link" href="#classical-mechanics">
         <div class="card-header">
           <div class="card-icon">▶</div>
@@ -461,7 +463,7 @@
           </div>
         </div>
         <div class="card-body">
-          <p>ROS、运动规划、具身智能、从拆零件到控制律。</p>
+          <p>ROS、运动规划、具身智能，从拆零件到控制律。</p>
         </div>
       </a>
 
@@ -503,6 +505,7 @@
           <p>律动、韵脚，以及一切未分类的有趣之物。</p>
         </div>
       </a>
+      </div>
 
       <!-- 可继续刷的内容区 -->
       <div class="section" id="classical-mechanics">
