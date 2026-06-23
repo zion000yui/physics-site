@@ -9,48 +9,45 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
   :root {
-    /* Dark theme (default) */
-    --bg: #08090d;
-    --bg2: #0f1117;
-    --bg3: #151822;
-    --fg: #e8ecf1;
-    --muted: #8b929e;
-    --accent: #64d2ff;
-    --accent2: #c084fc;
-    --border: rgba(255,255,255,0.06);
-    --glass: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.08);
-    --shadow: 0 20px 60px rgba(0,0,0,0.5);
-    --radius: 18px;
-    --code-bg: #1a1b23;
-    --code-text: #e2b4ff;
-    --overlay-bg: rgba(0,0,0,0.6);
-    --input-bg: rgba(255,255,255,0.05);
-    --nav-hover: rgba(255,255,255,0.05);
-    --nav-active-bg: linear-gradient(90deg, rgba(100,210,255,0.18), rgba(192,132,252,0.08));
-    --nav-active-border: rgba(100,210,255,0.2);
-  }
-
-  [data-theme="light"] {
-    --bg: #f7f9f9;
-    --bg2: #ffffff;
-    --bg3: #f0f2f2;
+    --bg: #ffffff;
+    --bg2: #f7f9f9;
+    --bg3: #eff3f4;
     --fg: #0f1419;
     --muted: #536471;
     --accent: #1d9bf0;
     --accent2: #7c3aed;
-    --border: rgba(0,0,0,0.08);
-    --glass: rgba(255,255,255,0.8);
-    --glass-border: rgba(0,0,0,0.06);
-    --shadow: 0 2px 16px rgba(0,0,0,0.08);
+    --border: #eff3f4;
+    --card-bg: #ffffff;
+    --card-border: #eff3f4;
+    --shadow: none;
     --radius: 16px;
     --code-bg: #f5f5f5;
     --code-text: #7c3aed;
-    --overlay-bg: rgba(0,0,0,0.3);
-    --input-bg: #f7f9f9;
-    --nav-hover: rgba(0,0,0,0.03);
-    --nav-active-bg: rgba(29,155,240,0.1);
-    --nav-active-border: rgba(29,155,240,0.25);
+    --overlay-bg: rgba(0,0,0,0.4);
+    --nav-bg: rgba(255,255,255,0.92);
+    --nav-border: #eff3f4;
+    --bottom-nav-bg: rgba(255,255,255,0.95);
+  }
+
+  [data-theme="dark"] {
+    --bg: #000000;
+    --bg2: #16181c;
+    --bg3: #1d1f23;
+    --fg: #e7e9ea;
+    --muted: #8b98a5;
+    --accent: #1d9bf0;
+    --accent2: #c084fc;
+    --border: #2f3336;
+    --card-bg: #000000;
+    --card-border: #2f3336;
+    --shadow: none;
+    --radius: 16px;
+    --code-bg: #16181c;
+    --code-text: #c084fc;
+    --overlay-bg: rgba(0,0,0,0.55);
+    --nav-bg: rgba(0,0,0,0.88);
+    --nav-border: #2f3336;
+    --bottom-nav-bg: rgba(0,0,0,0.95);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -67,485 +64,583 @@
   body {
     min-height: 100vh;
     overflow-x: hidden;
-    transition: background 0.3s, color 0.3s;
-  }
-
-  [data-theme="light"] body {
     background: var(--bg);
+    transition: background 0.25s, color 0.25s;
   }
 
-  /* Layout */
-  .app {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    min-height: 100vh;
-  }
-  @media (max-width: 880px) {
-    .app { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .sidebar.open { display: flex; position: fixed; top: 0; left: 0; z-index: 50; height: 100vh; flex-direction: column; }
-  }
-
-  /* Sidebar */
-  .sidebar {
+  /* Top nav */
+  .topnav {
     position: sticky;
     top: 0;
-    height: 100vh;
-    padding: 28px 22px;
-    background: var(--glass);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border-right: 1px solid var(--glass-border);
+    z-index: 30;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-bottom: 1px solid var(--nav-border);
+    padding: 0 20px;
+    height: 53px;
     display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    transition: background 0.3s, border-color 0.3s;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: background 0.25s, border-color 0.25s;
   }
-
-  .brand {
+  .topnav-title {
     font-size: 17px;
     font-weight: 800;
-    letter-spacing: -0.3px;
-    margin-bottom: 28px;
-    background: linear-gradient(135deg, var(--fg), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: -0.2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .brand small {
-    display: block;
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 600;
-    margin-top: 6px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    -webkit-text-fill-color: var(--muted);
-  }
+  .topnav-actions { display: flex; gap: 8px; align-items: center; }
 
-  .search {
-    width: 100%;
-    padding: 12px 14px;
-    background: var(--input-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 12px;
-    color: var(--fg);
-    font-size: 14px;
-    outline: none;
-    margin-bottom: 20px;
-    transition: all 0.2s;
-  }
-  .search:focus {
-    border-color: var(--accent);
-    background: var(--bg2);
-    box-shadow: 0 0 0 3px rgba(29,155,240,0.1);
-  }
-
-  .nav { list-style: none; flex: 1; }
-  .nav li { margin: 3px 0; }
-  .nav a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    color: var(--muted);
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.15s;
+  .icon-btn {
+    background: transparent;
     border: none;
-  }
-  .nav a:hover {
-    background: var(--nav-hover);
     color: var(--fg);
-  }
-  .nav a.active {
-    background: var(--nav-active-bg);
-    color: var(--accent);
-    font-weight: 600;
-    box-shadow: inset 0 0 0 1px var(--nav-active-border);
-  }
-  .nav .sep { height: 1px; background: var(--glass-border); margin: 12px 0; }
-  .nav .section {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--muted);
-    margin: 14px 14px 6px;
-    font-weight: 700;
-    opacity: 0.6;
-  }
-
-  /* Main */
-  .main {
-    padding: 44px 52px;
-    max-width: 1000px;
-    position: relative;
-  }
-  @media (max-width: 880px) { .main { padding: 28px 20px; } }
-
-  .topbar {
-    display: flex;
-    justify-content: space-between;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
     align-items: center;
-    margin-bottom: 36px;
-    gap: 14px;
-  }
-  .menu-btn {
-    display: none;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--fg);
-    padding: 10px 12px;
-    border-radius: 12px;
+    justify-content: center;
     cursor: pointer;
     font-size: 18px;
-    backdrop-filter: blur(12px);
-    transition: all 0.2s;
-    font-family: inherit;
+    transition: background 0.2s;
   }
-  .menu-btn:hover { background: var(--nav-hover); }
-  @media (max-width: 880px) { .menu-btn { display: inline-flex; } }
+  .icon-btn:hover { background: var(--bg3); }
 
-  .theme-toggle {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--fg);
-    padding: 8px 14px;
+  .pill {
+    padding: 7px 14px;
     border-radius: 20px;
-    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--fg);
     font-size: 13px;
     font-weight: 500;
-    backdrop-filter: blur(12px);
+    cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
   }
-  .theme-toggle:hover {
-    background: var(--nav-hover);
-    border-color: var(--accent);
-  }
+  .pill:hover { border-color: var(--accent); color: var(--accent); }
+  .pill.active { background: var(--bg3); font-weight: 700; }
 
-  .badge {
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    padding: 5px 10px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    display: none;
-  }
-  @media (min-width: 881px) { .badge { display: inline-block; } }
-
-  /* Hero */
-  h1 {
-    font-size: clamp(34px, 4.5vw, 52px);
-    font-weight: 800;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    letter-spacing: -1px;
-  }
-  .lead {
-    font-size: 18px;
-    color: var(--muted);
-    margin-bottom: 32px;
-    line-height: 1.6;
-    max-width: 640px;
-    font-weight: 400;
+  /* Feed */
+  .feed {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 10px 16px 90px;
   }
 
   /* Cards */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 14px;
-    margin: 24px 0;
-  }
   .card {
-    background: var(--glass);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid var(--glass-border);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: 18px 18px 16px;
+    margin-bottom: 10px;
+    transition: background 0.25s, border-color 0.25s, box-shadow 0.2s;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
   }
   .card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
     border-color: var(--accent);
+    box-shadow: 0 2px 12px rgba(29,155,240,0.08);
   }
-  .card h3 {
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .card-icon {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .card-title {
     font-size: 15px;
     font-weight: 700;
-    margin-bottom: 8px;
-    letter-spacing: -0.2px;
+    color: var(--fg);
+    line-height: 1.2;
   }
-  .card p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.4;
-  }
-
-  /* Typography */
-  h2 {
-    font-size: 26px;
-    font-weight: 800;
-    margin: 56px 0 18px;
-    letter-spacing: -0.4px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--glass-border);
-  }
-  h3 {
-    font-size: 19px;
-    font-weight: 700;
-    margin: 28px 0 12px;
-    letter-spacing: -0.2px;
-  }
-  p {
-    margin: 0 0 14px;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.7;
-  }
-
-  .tag {
-    display: inline-block;
-    font-size: 11px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    background: var(--glass);
-    color: var(--muted);
-    border: 1px solid var(--glass-border);
-    margin: 0 5px 8px 0;
-    font-weight: 500;
-    backdrop-filter: blur(10px);
-  }
-
-  /* Code */
-  code {
-    background: var(--code-bg);
-    padding: 2px 7px;
-    border-radius: 6px;
+  .card-meta {
     font-size: 12px;
-    font-family: "SF Mono", "Fira Code", Consolas, monospace;
-    color: var(--code-text);
-    border: 1px solid var(--glass-border);
+    color: var(--muted);
+    margin-top: 2px;
   }
-  pre {
+
+  .card-body {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: var(--fg);
+    margin-bottom: 10px;
+  }
+  .card-body p { margin: 0 0 10px; color: var(--fg); }
+  .card-body strong { font-weight: 700; color: var(--fg); }
+  .card-body em { font-style: italic; }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .tag {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 18px;
+    background: var(--bg3);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  .card-equation {
+    margin: 10px 0;
+    padding: 12px;
+    text-align: center;
     background: var(--bg2);
-    border: 1px solid var(--glass-border);
     border-radius: var(--radius);
-    padding: 18px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    overflow-x: auto;
+  }
+  .card-equation .katex { font-size: 1.1em; }
+
+  .card-code {
+    margin: 10px 0;
+    padding: 14px;
+    background: var(--code-bg);
+    border-radius: var(--radius);
     overflow-x: auto;
     font-size: 13px;
     line-height: 1.6;
+    border: 1px solid var(--card-border);
   }
-  pre code {
+  .card-code code {
     background: none;
     border: none;
     padding: 0;
     color: var(--fg);
+    font-family: "SF Mono", "Fira Code", Consolas, monospace;
   }
 
-  /* Math */
-  .math-display {
-    margin: 16px 0;
-    padding: 14px;
-    text-align: center;
-    background: var(--glass);
-    border-radius: var(--radius);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-  }
-
-  /* Footer */
-  .footer {
-    margin-top: 80px;
-    padding: 24px 0;
-    border-top: 1px solid var(--glass-border);
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
     font-size: 12px;
     color: var(--muted);
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
+  }
+  .card-footer-left { display: flex; gap: 14px; }
+  .card-footer-item { display: flex; align-items: center; gap: 5px; }
+
+  /* Hero */
+  .hero {
+    margin-bottom: 18px;
+    padding: 24px 4px 10px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .hero p {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 14px;
   }
 
-  /* Overlay */
+  /* Bottom Nav */
+  .bottomnav {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    z-index: 30;
+    background: var(--bottom-nav-bg);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-top: 1px solid var(--nav-border);
+    display: none;
+    justify-content: space-around;
+    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+  }
+  @media (max-width: 880px) { .bottomnav { display: flex; } }
+
+  .bnav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 10px;
+    transition: color 0.2s;
+    font-family: inherit;
+  }
+  .bnav-item .bnav-icon { font-size: 22px; line-height: 1; }
+  .bnav-item.active { color: var(--accent); }
+
+  /* Sidebar overlay */
   .overlay {
     display: none;
     position: fixed;
     inset: 0;
     background: var(--overlay-bg);
-    backdrop-filter: blur(6px);
     z-index: 40;
-    transition: opacity 0.3s;
   }
   .overlay.show { display: block; }
-  @media (min-width: 881px) { .overlay.show { display: none !important; } }
+
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 280px;
+    max-width: 82vw;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-right: 1px solid var(--nav-border);
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 20px;
+  }
+  .sidebar.open { transform: translateX(0); }
+  @media (min-width: 881px) {
+    .sidebar {
+      position: sticky;
+      top: 53px;
+      height: calc(100vh - 53px);
+      width: 260px;
+      max-width: none;
+      transform: none;
+      background: transparent;
+      border-right: none;
+      backdrop-filter: none;
+      z-index: 1;
+      padding: 20px 20px 20px 0;
+    }
+  }
+
+  .sidebar-brand {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-brand small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-top: 4px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+
+  .search {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--fg);
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 14px;
+  }
+  .search:focus { border-color: var(--accent); }
+
+  .nav-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--muted);
+    margin: 14px 10px 6px;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+  .nav-item {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 12px;
+    color: var(--fg);
+    font-size: 14px;
+    font-weight: 500;
+    margin: 2px 0;
+    transition: background 0.15s;
+  }
+  .nav-item:hover { background: var(--bg3); text-decoration: none; }
+  .nav-item.active {
+    background: var(--bg3);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  @media (max-width: 880px) {
+    .desktop-only { display: none !important; }
+    .feed { padding: 8px 12px 90px; }
+    .card { padding: 16px; }
+  }
+  @media (min-width: 881px) {
+    .mobile-only { display: none !important; }
+  }
 
   /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.25); border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(128,128,128,0.4); }
-
-  /* Theme transition */
-  .sidebar, .card, .search, .theme-toggle, .menu-btn, code, pre, .math-display {
-    transition: background 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s;
-  }
+  ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(128,128,128,0.35); }
 </style>
 </head>
 <body>
 <div class="app">
   <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Desktop sidebar -->
   <aside class="sidebar" id="sidebar">
-    <div class="brand">
+    <div class="sidebar-brand">
       Zion 的私人物理宇宙
       <small>Physics · Robotics · 阴阳 · Theology · Others</small>
     </div>
+
     <input class="search" id="search" placeholder="搜索文章..." oninput="filterNav(this.value)">
-    <ul class="nav" id="nav">
-      <li class="section">导航</li>
-      <li><a href="#home" class="active" data-key="首页 经典力学 机器人学 五行阴阳 基督教 神学 音乐 诗歌">🏠 首页</a></li>
-      <li class="sep"></li>
-      <li class="section">分类</li>
-      <li><a href="#classical-mechanics" data-key="经典力学 牛顿 拉格朗日 哈密顿 力学">📐 经典力学</a></li>
-      <li><a href="#robotics" data-key="机器人学 ROS 控制 感知 运动规划">🤖 机器人学</a></li>
-      <li><a href="#yin-yang" data-key="五行阴阳 中医 易经 气 太极">☯️ 五行阴阳</a></li>
-      <li><a href="#theology" data-key="基督教 神学 圣经 信仰 神">✝️ 基督教神学</a></li>
-      <li class="sep"></li>
-      <li class="section">其他</li>
-      <li><a href="#music" data-key="音乐 乐理 和声 作曲">🎵 音乐</a></li>
-      <li><a href="#poetry" data-key="诗歌 韵律 现代诗 古诗">📜 诗歌</a></li>
-      <li><a href="#misc" data-key="杂项 其他 有趣 想法">🧩 杂项</a></li>
-    </ul>
+    <div class="nav-title">导航</div>
+    <a href="#home" class="nav-item active" data-key="首页">🏠 首页</a>
+    <div class="nav-title">分类</div>
+    <a href="#classical-mechanics" class="nav-item" data-key="经典力学">📐 经典力学</a>
+    <a href="#robotics" class="nav-item" data-key="机器人学">🤖 机器人学</a>
+    <a href="#yin-yang" class="nav-item" data-key="五行阴阳">☯️ 五行阴阳</a>
+    <a href="#theology" class="nav-item" data-key="基督教 神学">✝️ 基督教神学</a>
+    <div class="nav-title">其他</div>
+    <a href="#music" class="nav-item" data-key="音乐">🎵 音乐</a>
+    <a href="#poetry" class="nav-item" data-key="诗歌">📜 诗歌</a>
+    <a href="#misc" class="nav-item" data-key="杂项">🧩 杂项</a>
   </aside>
 
+  <!-- Main feed -->
   <main class="main">
-    <div class="topbar">
-      <button class="menu-btn" onclick="openSidebar()">☰</button>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 深色</button>
+    <div class="topnav">
+      <button class="icon-btn mobile-only" onclick="openSidebar()">☰</button>
+      <div class="topnav-title">Zion · 物理宇宙</div>
+      <div class="topnav-actions">
+        <button class="pill mobile-only" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <button class="pill desktop-only" onclick="toggleTheme()" id="themeBtnDesktop">切换主题</button>
+      </div>
     </div>
 
-    <!-- HOME -->
-    <section id="home">
-      <h1>私人物理宇宙</h1>
-      <p class="lead">物理学 × 机器人学 × 形而上学 · 一个没有边界的混合实验场</p>
-
-      <div class="cards">
-        <div class="card" onclick="scrollToSection('classical-mechanics')">
-          <h3>📐 经典力学</h3>
-          <p>从牛顿到拉格朗日，从单摆到刚体旋量。</p>
+    <div class="feed">
+      <!-- HOME -->
+      <section id="home" class="hero">
+        <h1>私人物理宇宙</h1>
+        <p>物理学 × 机器人学 × 形而上学 · 一个没有边界的混合实验场</p>
+        <div class="card-tags">
+          <span class="tag" onclick="scrollToSection('classical-mechanics')" style="cursor:pointer;">📐 经典力学</span>
+          <span class="tag" onclick="scrollToSection('robotics')" style="cursor:pointer;">🤖 机器人学</span>
+          <span class="tag" onclick="scrollToSection('yin-yang')" style="cursor:pointer;">☯️ 五行阴阳</span>
+          <span class="tag" onclick="scrollToSection('theology')" style="cursor:pointer;">✝️ 神学</span>
+          <span class="tag" onclick="scrollToSection('others')" style="cursor:pointer;">🎨 其他</span>
         </div>
-        <div class="card" onclick="scrollToSection('robotics')">
-          <h3>🤖 机器人学</h3>
-          <p>具身智能、运动规划、以及从废品到机器人的旅程。</p>
-        </div>
-        <div class="card" onclick="scrollToSection('yin-yang')">
-          <h3>☯️ 五行阴阳</h3>
-          <p>东方系统论的数学隐喻，相生相克即系统耦合。</p>
-        </div>
-        <div class="card" onclick="scrollToSection('theology')">
-          <h3>✝️ 基督教神学</h3>
-          <p>信仰与逻辑、历史与存在的交汇。</p>
-        </div>
-        <div class="card" onclick="scrollToSection('others')">
-          <h3>🎨 更多</h3>
-          <p>音乐、诗歌、以及一切有趣之物。</p>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 经典力学 -->
-    <section id="classical-mechanics">
-      <h2>经典力学</h2>
-      <p>从最朴素的牛顿第二定律到场论的欧拉-拉格朗日方程。这里记录推导、直觉和习题。</p>
-      <span class="tag">牛顿力学</span><span class="tag">拉格朗日</span><span class="tag">哈密顿</span><span class="tag">刚体</span><span class="tag">连续介质</span>
+      <!-- 经典力学 -->
+      <article class="card" onclick="void(0)">
+        <div class="card-header">
+          <div class="card-icon">📐</div>
+          <div>
+            <div class="card-title">经典力学</div>
+            <div class="card-meta">5 篇文章</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>从最朴素的牛顿第二定律到场论的欧拉-拉格朗日方程。这里记录推导、直觉和习题。</p>
+          <strong>示例：单摆的拉格朗日量</strong>
+          <p>对于摆长为 $\ell$、质量为 $m$ 的单摆，广义坐标取角度 $\theta$：</p>
+          <div class="card-equation" data-expr="L = T - V = \frac{1}{2} m \ell^2 \dot{\theta}^2 - mg\ell(1-\cos\theta)"></div>
+          <p>代入欧拉-拉格朗日方程：</p>
+          <div class="card-equation" data-expr="\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta}} - \frac{\partial L}{\partial \theta} = 0 \;\Longrightarrow\; \ddot{\theta} + \frac{g}{\ell}\sin\theta = 0"></div>
+          <p>小角近似 $\sin\theta \approx \theta$ 可得简谐运动周期 $T = 2\pi\sqrt{\ell/g}$。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag">牛顿力学</span><span class="tag">拉格朗日</span><span class="tag">哈密顿</span><span class="tag">刚体</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-footer-item">❤️ 12</span>
+            <span class="card-footer-item">💬 3</span>
+          </div>
+          <span>刚刚更新</span>
+        </div>
+      </article>
 
-      <h3>示例：单摆的拉格朗日量</h3>
-      <p>对于摆长为 $\ell$、质量为 $m$ 的单摆，广义坐标取角度 $\theta$：</p>
-      <div class="math-display" data-expr="L = T - V = \frac{1}{2} m \ell^2 \dot{\theta}^2 - mg\ell(1-\cos\theta)"></div>
-      <p>代入欧拉-拉格朗日方程：</p>
-      <div class="math-display" data-expr="\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta}} - \frac{\partial L}{\partial \theta} = 0 \;\Longrightarrow\; \ddot{\theta} + \frac{g}{\ell}\sin\theta = 0"></div>
-      <p>小角近似 $\sin\theta \approx \theta$ 可得简谐运动周期 $T = 2\pi\sqrt{\ell/g}$。</p>
-    </section>
-
-    <!-- 机器人学 -->
-    <section id="robotics">
-      <h2>机器人学</h2>
-      <p>从废旧零件到具身智能。理论、代码与硬件记录。</p>
-      <span class="tag">ROS</span><span class="tag">运动学</span><span class="tag">动力学</span><span class="tag">路径规划</span><span class="tag">SLAM</span><span class="tag">嵌入式</span>
-
-      <h3>示例：两轮差速运动学</h3>
-      <p>左右轮速度 $v_r, v_l$，轴距 $L$：</p>
-      <div class="math-display" data-expr="v = \frac{v_r + v_l}{2}, \quad \omega = \frac{v_r - v_l}{L}"></div>
-      <p>位姿更新：</p>
-      <div class="math-display" data-expr="\dot{x} = v\cos\theta, \quad \dot{y} = v\sin\theta, \quad \dot{\theta} = \omega"></div>
-      <pre><code># 离散迭代示例
-def diff_drive_step(x, y, theta, vr, vl, L, dt):
+      <!-- 机器人学 -->
+      <article class="card" onclick="void(0)">
+        <div class="card-header">
+          <div class="card-icon">🤖</div>
+          <div>
+            <div class="card-title">机器人学</div>
+            <div class="card-meta">8 篇文章</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>从废旧零件到具身智能。理论、代码与硬件记录。</p>
+          <strong>示例：两轮差速运动学</strong>
+          <p>左右轮速度 $v_r, v_l$，轴距 $L$：</p>
+          <div class="card-equation" data-expr="v = \frac{v_r + v_l}{2}, \quad \omega = \frac{v_r - v_l}{L}"></div>
+          <p>位姿更新：</p>
+          <div class="card-equation" data-expr="\dot{x} = v\cos\theta, \quad \dot{y} = v\sin\theta, \quad \dot{\theta} = \omega"></div>
+        </div>
+        <div class="card-code"><code># 离散迭代示例
+def diff_drive_step(x, y, θ, vr, vl, L, dt):
     v = (vr + vl) / 2
     w = (vr - vl) / L
-    x += v * cos(theta) * dt
-    y += v * sin(theta) * dt
-    theta += w * dt
-    return x, y, theta</code></pre>
-    </section>
+    x += v * cos(θ) * dt
+    y += v * sin(θ) * dt
+    θ += w * dt
+    return x, y, θ</code></div>
+        <div class="card-tags">
+          <span class="tag">ROS</span><span class="tag">运动学</span><span class="tag">动力学</span><span class="tag">路径规划</span><span class="tag">SLAM</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-footer-item">❤️ 24</span>
+            <span class="card-footer-item">💬 7</span>
+          </div>
+          <span>2 小时前</span>
+        </div>
+      </article>
 
-    <!-- 五行阴阳 -->
-    <section id="yin-yang">
-      <h2>五行阴阳学说</h2>
-      <p>东方系统论：相生相克、太极两仪、四象八卦。尝试用系统思维与数学结构理解它。</p>
-      <span class="tag">太极</span><span class="tag">阴阳</span><span class="tag">五行</span><span class="tag">八卦</span><span class="tag">系统论</span>
+      <!-- 五行阴阳 -->
+      <article class="card" onclick="void(0)">
+        <div class="card-header">
+          <div class="card-icon">☯️</div>
+          <div>
+            <div class="card-title">五行阴阳学说</div>
+            <div class="card-meta">3 篇文章</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>东方系统论：相生相克、太极两仪、四象八卦。尝试用系统思维与数学结构理解它。</p>
+          <strong>示例：五行相生循环</strong>
+          <div class="card-equation" data-expr="\text{木} \rightarrow \text{火} \rightarrow \text{土} \rightarrow \text{金} \rightarrow \text{水} \rightarrow \text{木}"></div>
+          <p>可抽象为有向循环图，节点集合 $V = \{W, F, E, M, Wa\}$，边集 $E = \{(W,F), (F,E), (E,M), (M,Wa), (Wa,W)\}$。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag">太极</span><span class="tag">阴阳</span><span class="tag">五行</span><span class="tag">八卦</span><span class="tag">系统论</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-footer-item">❤️ 8</span>
+            <span class="card-footer-item">💬 2</span>
+          </div>
+          <span>昨天</span>
+        </div>
+      </article>
 
-      <h3>示例：五行相生循环</h3>
-      <div class="math-display" data-expr="\text{木} \rightarrow \text{火} \rightarrow \text{土} \rightarrow \text{金} \rightarrow \text{水} \rightarrow \text{木}"></div>
-      <p>可抽象为有向循环图，节点集合 $V = \{W, F, E, M, Wa\}$，边集 $E = \{(W,F), (F,E), (E,M), (M,Wa), (Wa,W)\}$。</p>
-    </section>
+      <!-- 基督教神学 -->
+      <article class="card" onclick="void(0)">
+        <div class="card-header">
+          <div class="card-icon">✝️</div>
+          <div>
+            <div class="card-title">基督教神学</div>
+            <div class="card-meta">4 篇文章</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>信仰与理性的对话。</p>
+          <strong>示例：三位一体逻辑结构</strong>
+          <p>一个上帝，三个位格：圣父、圣子、圣灵。传统表述为 <em>one ousia, three hypostases</em>（一位格，三个实体）。这是一个非平凡的系统结构问题，而非简单的 1+1+1。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag">圣经研究</span><span class="tag">系统神学</span><span class="tag">历史</span><span class="tag">护教</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-footer-item">❤️ 15</span>
+            <span class="card-footer-item">💬 5</span>
+          </div>
+          <span>3 天前</span>
+        </div>
+      </article>
 
-    <!-- 基督教神学 -->
-    <section id="theology">
-      <h2>基督教神学</h2>
-      <p>信仰与理性的对话。</p>
-      <span class="tag">圣经研究</span><span class="tag">系统神学</span><span class="tag">历史</span><span class="tag">护教</span>
-      <h3>示例：三位一体逻辑结构</h3>
-      <p>一个上帝，三个位格：圣父、圣子、圣灵。传统表述为 <em>one ousia, three hypostases</em>（一位格，三个实体）。这是一个非平凡的系统结构问题，而非简单的 1+1+1。</p>
-    </section>
+      <!-- 其他 -->
+      <article class="card" onclick="void(0)">
+        <div class="card-header">
+          <div class="card-icon">🎨</div>
+          <div>
+            <div class="card-title">其他</div>
+            <div class="card-meta">音乐 · 诗歌 · 杂项</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <p>音乐、诗歌、以及一切有趣但未分类的东西。</p>
+          <p>🎵 乐理笔记、和声练习、以及用代码生成音乐的想法。<br>📜 旧诗新写，以及写着玩的现代诗。<br>🧩 未分类的思考、实验、发现、碎片。</p>
+        </div>
+        <div class="card-tags">
+          <span class="tag">音乐</span><span class="tag">诗歌</span><span class="tag">杂项</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-footer-left">
+            <span class="card-footer-item">❤️ 6</span>
+            <span class="card-footer-item">💬 1</span>
+          </div>
+          <span>1 周前</span>
+        </div>
+      </article>
 
-    <!-- 其他 -->
-    <section id="others">
-      <h2>其他</h2>
-      <p>音乐、诗歌、以及一切有趣但未分类的东西。</p>
-
-      <h3>🎵 音乐</h3>
-      <p>这里记录乐理笔记、和声练习、以及用代码生成音乐的想法。</p>
-
-      <h3>📜 诗歌</h3>
-      <p>旧诗新写，以及写着玩的现代诗。</p>
-
-      <h3>🧩 杂项</h3>
-      <p>未分类的思考、实验、发现、碎片。</p>
-    </section>
-
-    <div class="footer">
-      <span>© Zion</span>
-      <span style="color:var(--muted);font-size:11px;">一个永不完结的宇宙</span>
+      <div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">
+        — 已到底部，更多内容持续更新中 —
+      </div>
     </div>
   </main>
 </div>
 
+<!-- Mobile bottom nav -->
+<nav class="bottomnav">
+  <button class="bnav-item active" onclick="scrollToSection('home'); setActiveNav(this);">
+    <span class="bnav-icon">🏠</span>
+    <span>首页</span>
+  </button>
+  <button class="bnav-item" onclick="scrollToSection('classical-mechanics'); setActiveNav(this);">
+    <span class="bnav-icon">📐</span>
+    <span>力学</span>
+  </button>
+  <button class="bnav-item" onclick="scrollToSection('robotics'); setActiveNav(this);">
+    <span class="bnav-icon">🤖</span>
+    <span>机器人</span>
+  </button>
+  <button class="bnav-item" onclick="scrollToSection('yin-yang'); setActiveNav(this);">
+    <span class="bnav-icon">☯️</span>
+    <span>阴阳</span>
+  </button>
+  <button class="bnav-item" onclick="scrollToSection('theology'); setActiveNav(this);">
+    <span class="bnav-icon">✝️</span>
+    <span>神学</span>
+  </button>
+</nav>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-  // Theme
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = saved || (prefersDark ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', theme);
-  updateThemeBtn(theme);
-
   renderMathInElement(document.body, {
     delimiters: [
       {left: "$$", right: "$$", display: true},
@@ -556,25 +651,23 @@ document.addEventListener("DOMContentLoaded", function() {
     throwOnError: false
   });
 
-  const nav = document.querySelectorAll('.nav a');
-  function activate(hash) {
-    nav.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + hash));
-  }
-  nav.forEach(a => a.addEventListener('click', () => {
-    activate(a.getAttribute('href').slice(1));
-    closeSidebar();
-  }));
-  if (location.hash) activate(location.hash.slice(1));
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  updateThemeBtn(theme);
 });
 
 function updateThemeBtn(theme) {
-  const btn = document.getElementById('themeBtn');
-  if (!btn) return;
-  btn.textContent = theme === 'dark' ? '☀️ 浅色' : '🌙 深色';
+  const text = theme === 'dark' ? '☀️' : '🌙';
+  const d = document.getElementById('themeBtn');
+  const d2 = document.getElementById('themeBtnDesktop');
+  if (d) d.textContent = text;
+  if (d2) d2.textContent = theme === 'dark' ? '☀️ 浅色' : '🌙 深色';
 }
 
 function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
   const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
@@ -588,32 +681,25 @@ function filterNav(q) {
   });
 }
 
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('overlay').classList.add('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+function setActiveNav(el) {
+  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - (id === 'home' ? 0 : 70);
   window.scrollTo({ top, behavior: 'smooth' });
   closeSidebar();
-}
-
-function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  const overlay = document.getElementById('overlay');
-  if (overlay) overlay.classList.add('show');
-}
-
-function closeSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  const overlay = document.getElementById('overlay');
-  sidebar.classList.remove('open');
-  if (overlay) overlay.classList.remove('show');
-
-  if (window.innerWidth <= 880) {
-    const hash = location.hash.slice(1);
-    if (!hash || !['home','classical-mechanics','robotics','yin-yang','theology','music','poetry','misc'].includes(hash)) {
-      history.replaceState(null, '', '#home');
-    }
-  }
 }
 </script>
 </body>
