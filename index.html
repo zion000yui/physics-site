@@ -460,7 +460,7 @@
   <main>
     <header class="topbar">
       <div class="topbar-left">
-        <button class="btn mobile-only" onclick="openSidebar()" style="padding:10px 10px;">☰ 三 导航</button>
+        <button class="btn mobile-only" onclick="openDetailSidebar()" style="padding:10px 10px;">☰</button>
         <span class="topbar-label desktop-only">三 导航</span>
       </div>
       <div class="topbar-right">
@@ -540,6 +540,9 @@
         <div class="card-body">
           <p>律动、韵脚，以及一切未分类的有趣之物。</p>
         </div>
+      </a>
+      </div>
+
       <!-- 详情弹层 -->
       <div class="detail-overlay" id="detailOverlay">
         <div class="detail-panel">
@@ -549,7 +552,7 @@
           </div>
           <div class="detail-body" id="detailBody"></div>
           <div id="giscus-mount"></div>
-      </div>
+        </div>
       </div>
 
 
@@ -892,5 +895,18 @@ window.addEventListener('message', (event) => {
 });
 window.addEventListener('hashchange', () => { window.__giscus_init && window.__giscus_init(); });
 </script>
-</body>
-</html>
+<script src="https://giscus.app/client.js"
+        data-repo="zion000yui/physics-site"
+        data-repo-id="R_kgDOTC-1Yw"
+        data-category="General"
+        data-category-id="DIC_kwDOTC-1Y84C_wxC"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
