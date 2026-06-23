@@ -26,7 +26,6 @@
     --overlay-bg: rgba(0,0,0,0.4);
     --nav-bg: rgba(255,255,255,0.96);
     --nav-border: #eff3f4;
-    --bottom-nav-bg: rgba(255,255,255,0.95);
   }
 
   [data-theme="dark"] {
@@ -47,7 +46,6 @@
     --overlay-bg: rgba(0,0,0,0.55);
     --nav-bg: rgba(0,0,0,0.92);
     --nav-border: #2f3336;
-    --bottom-nav-bg: rgba(0,0,0,0.95);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -286,41 +284,7 @@
     margin-bottom: 18px;
   }
 
-  /* Bottom Nav */
-  .bottomnav {
-    position: fixed;
-    bottom: 0;
-    left: 0; right: 0;
-    z-index: 30;
-    background: var(--bottom-nav-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    border-top: 1px solid var(--nav-border);
-    display: none;
-    justify-content: space-around;
-    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-  }
-  @media (max-width: 880px) { .bottomnav { display: flex; } }
-
-  .bnav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 4px 10px;
-    transition: color 0.2s;
-    font-family: inherit;
-  }
-  .bnav-item .bnav-icon { font-size: 24px; line-height: 1; }
-  .bnav-item.active { color: var(--accent); }
-
-  /* Overlay */
+  /* Scrollbar */
   .overlay {
     display: none;
     position: fixed;
@@ -666,29 +630,7 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
   </main>
 </div>
 
-<!-- Mobile bottom nav -->
-<nav class="bottomnav">
-  <button class="bnav-item active" onclick="scrollToSection('home'); setActiveNav(this);">
-    <span class="bnav-icon">🏠</span>
-    <span>首页</span>
-  </button>
-  <button class="bnav-item" onclick="scrollToSection('classical-mechanics'); setActiveNav(this);">
-    <span class="bnav-icon">📐</span>
-    <span>力学</span>
-  </button>
-  <button class="bnav-item" onclick="scrollToSection('robotics'); setActiveNav(this);">
-    <span class="bnav-icon">🤖</span>
-    <span>机器人</span>
-  </button>
-  <button class="bnav-item" onclick="scrollToSection('yin-yang'); setActiveNav(this);">
-    <span class="bnav-icon">☯️</span>
-    <span>阴阳</span>
-  </button>
-  <button class="bnav-item" onclick="scrollToSection('theology'); setActiveNav(this);">
-    <span class="bnav-icon">✝️</span>
-    <span>神学</span>
-  </button>
-</nav>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -741,7 +683,8 @@ function closeSidebar() {
   document.getElementById('overlay').classList.remove('show');
 }
 function setActiveNav(el) {
-  document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+  if (!el) return;
+  document.querySelectorAll('.nav-item.active').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
 }
 
