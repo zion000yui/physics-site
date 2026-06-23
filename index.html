@@ -9,79 +9,380 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
   :root {
-    --bg: #f4f1ea;
-    --bg2: #faf8f3;
-    --bg3: #ece8df;
-    --fg: #1c1917;
-    --muted: #4a4540;
-    --accent: #7c3a1a;
-    --accent2: #2d3b36;
-    --warn: #9a6b0b;
-    --ok: #4a5f3a;
-    --border: #cdc4b0;
-    --shadow: 0 2px 14px rgba(60,50,30,0.08);
-    --radius: 2px;
+    --bg: #08090d;
+    --bg2: #0f1117;
+    --bg3: #151822;
+    --fg: #e8ecf1;
+    --muted: #8b929e;
+    --accent: #64d2ff;
+    --accent2: #c084fc;
+    --accent3: #f59e0b;
+    --border: rgba(255,255,255,0.06);
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.08);
+    --shadow: 0 20px 60px rgba(0,0,0,0.5);
+    --radius: 20px;
   }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: "Georgia", "Noto Serif SC", "Times New Roman", "Songti SC", serif; line-height: 1.75; font-size: 16.5px; font-weight: 420; }
-  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color .15s; }
-  a:hover { border-bottom-color: var(--accent); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: "Inter", "SF Pro Display", -apple-system, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background:
+      radial-gradient(ellipse 80% 60% at 10% 20%, rgba(96,165,250,0.15), transparent),
+      radial-gradient(ellipse 60% 50% at 90% 80%, rgba(168,85,247,0.15), transparent),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,0,0,0), transparent),
+      var(--bg);
+    background-attachment: fixed;
+  }
+
+  /* Grid overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
   /* Layout */
-  .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
-  @media (max-width: 860px) { .app { grid-template-columns: 1fr; } .sidebar { display: none; } .sidebar.open { display: block; position: fixed; top: 0; left: 0; z-index: 50; height: 100vh; } }
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 40; }
-  .overlay.show { display: block; }
-  @media (min-width: 861px) { .overlay.show { display: none !important; } }
+  .app {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+  @media (max-width: 880px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .sidebar.open { display: flex; position: fixed; top: 0; left: 0; z-index: 50; height: 100vh; flex-direction: column; }
+  }
 
   /* Sidebar */
-  .sidebar { background: var(--bg2); border-right: 1px solid var(--border); padding: 32px 22px; position: sticky; top: 0; height: 100vh; overflow-y: auto; font-size: 14px; }
-  .brand { font-size: 16px; font-weight: 700; letter-spacing: 0.3px; margin-bottom: 26px; color: var(--fg); font-family: "Georgia", serif; }
-  .brand small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 5px; font-style: italic; }
-  .nav { list-style: none; padding: 0; margin: 0; }
-  .nav li { margin: 1px 0; }
-  .nav a { display: block; padding: 7px 10px; color: var(--fg); border: none; }
-  .nav a:hover { background: var(--bg3); }
-  .nav a.active { background: var(--bg3); color: var(--accent); font-weight: 600; }
-  .nav .sep { height: 1px; background: var(--border); margin: 12px 0; }
-  .nav .section { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin: 16px 10px 6px; font-family: -apple-system, sans-serif; }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 32px 24px;
+    background: rgba(15,17,23,0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .brand {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    margin-bottom: 32px;
+    background: linear-gradient(135deg, var(--fg), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .brand small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 6px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    -webkit-text-fill-color: var(--muted);
+  }
+
+  .search {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    color: var(--fg);
+    font-size: 13px;
+    outline: none;
+    margin-bottom: 24px;
+    transition: all 0.2s;
+  }
+  .search:focus {
+    border-color: var(--accent);
+    background: rgba(100,210,255,0.08);
+    box-shadow: 0 0 0 3px rgba(100,210,255,0.1);
+  }
+
+  .nav { list-style: none; flex: 1; }
+  .nav li { margin: 3px 0; }
+  .nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: none;
+  }
+  .nav a:hover {
+    background: var(--glass);
+    color: var(--fg);
+    transform: translateX(2px);
+  }
+  .nav a.active {
+    background: linear-gradient(90deg, rgba(100,210,255,0.18), rgba(192,132,252,0.08));
+    color: var(--accent);
+    box-shadow: inset 0 0 0 1px rgba(100,210,255,0.2);
+  }
+  .nav .sep { height: 1px; background: var(--glass-border); margin: 14px 0; }
+  .nav .section {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    color: var(--muted);
+    margin: 16px 14px 8px;
+    font-weight: 600;
+    opacity: 0.7;
+  }
 
   /* Main */
-  .main { padding: 44px 56px; max-width: 960px; background: var(--bg); }
-  @media (max-width: 860px) { .main { padding: 28px 22px; } }
-  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-  .menu-btn { display: none; background: transparent; border: 1px solid var(--border); color: var(--fg); padding: 5px 10px; border-radius: 2px; cursor: pointer; font-family: inherit; }
-  @media (max-width: 860px) { .menu-btn { display: inline-block; } }
+  .main {
+    padding: 48px 56px;
+    max-width: 1000px;
+    position: relative;
+  }
+  @media (max-width: 880px) { .main { padding: 28px 20px; } }
 
-  /* Typography */
-  h1 { font-size: 32px; margin: 0 0 16px; font-weight: 700; line-height: 1.3; }
-  h2 { font-size: 22px; margin: 44px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); font-weight: 600; }
-  h3 { font-size: 18px; margin: 28px 0 10px; color: var(--accent); font-weight: 600; font-style: italic; }
-  p { margin: 0 0 16px; color: #1f1d1b; text-align: justify; font-weight: 420; }
-  .lead { font-size: 17px; color: #3a352f; margin-bottom: 28px; font-style: italic; line-height: 1.65; font-weight: 450; }
-  .tag { display: inline-block; font-size: 11px; padding: 2px 10px; border: 1px solid var(--border); background: var(--bg); color: var(--muted); margin: 0 5px 6px 0; font-family: -apple-system, sans-serif; letter-spacing: 0.3px; font-weight: 500; }
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 16px;
+  }
+  .menu-btn {
+    display: none;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--fg);
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    backdrop-filter: blur(10px);
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .menu-btn:hover { background: var(--glass); }
+  @media (max-width: 880px) { .menu-btn { display: inline-flex; } }
+
+  .badge {
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: 6px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.3px;
+  }
+
+  /* Hero */
+  h1 {
+    font-size: clamp(38px, 5vw, 58px);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 18px;
+    letter-spacing: -1.5px;
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .lead {
+    font-size: 19px;
+    color: var(--muted);
+    margin-bottom: 36px;
+    line-height: 1.6;
+    max-width: 680px;
+    font-weight: 400;
+  }
 
   /* Cards */
-  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin: 24px 0; }
-  .card { background: var(--bg2); border: 1px solid var(--border); padding: 20px; border-radius: 0; transition: box-shadow .2s; }
-  .card:hover { box-shadow: var(--shadow); }
-  .card h3 { margin: 0 0 8px; font-size: 15px; color: var(--fg); font-style: normal; }
-  .card p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow), 0 0 0 1px rgba(100,210,255,0.2);
+    border-color: rgba(100,210,255,0.3);
+  }
+  .card:hover::before { opacity: 1; }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.2px;
+  }
+  .card p {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
 
-  /* Code - 经典风用细边框代替阴影 */
-  code { background: var(--bg3); padding: 1px 5px; border: 1px solid var(--border); font-size: 12px; font-family: "Consolas", "Monaco", monospace; }
-  pre { background: var(--bg2); border: 1px solid var(--border); padding: 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.6; }
-  pre code { background: none; border: none; padding: 0; color: var(--fg); }
+  /* Typography */
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 64px 0 20px;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  h2::before {
+    content: '';
+    width: 4px;
+    height: 28px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 32px 0 14px;
+    color: var(--fg);
+    letter-spacing: -0.3px;
+  }
+  p {
+    margin: 0 0 16px;
+    color: #c5cad4;
+    font-size: 15.5px;
+    line-height: 1.75;
+  }
 
-  /* Math block */
-  .math-display { margin: 18px 0; padding: 10px 0; text-align: center; }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--glass);
+    color: var(--muted);
+    border: 1px solid var(--glass-border);
+    margin: 0 5px 8px 0;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.2px;
+  }
+
+  /* Code */
+  code {
+    background: var(--bg3);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: "SF Mono", "Fira Code", Consolas, monospace;
+    color: #e2b4ff;
+    border: 1px solid var(--glass-border);
+  }
+  pre {
+    background: var(--bg2);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.55;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--fg);
+  }
+
+  /* Math */
+  .math-display {
+    margin: 18px 0;
+    padding: 16px;
+    text-align: center;
+    background: var(--glass);
+    border-radius: var(--radius);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+  }
 
   /* Footer */
-  .footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); font-style: italic; }
+  .footer {
+    margin-top: 100px;
+    padding: 28px 0;
+    border-top: 1px solid var(--glass-border);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-  /* Search */
-  .search { width: 100%; padding: 8px 10px; background: var(--bg); border: 1px solid var(--border); color: var(--fg); font-size: 13px; outline: none; font-family: inherit; }
-  .search:focus { border-color: var(--accent); }
+  /* Overlay */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 40;
+  }
+  .overlay.show { display: block; }
+  @media (min-width: 881px) { .overlay.show { display: none !important; } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 </style>
 </head>
 <body>
@@ -94,36 +395,54 @@
     </div>
     <input class="search" id="search" placeholder="搜索文章..." oninput="filterNav(this.value)">
     <ul class="nav" id="nav">
+      <li class="section">导航</li>
+      <li><a href="#home" class="active" data-key="首页 经典力学 机器人学 五行阴阳 基督教 神学 音乐 诗歌" style="padding:12px 14px;font-size:15px;">🏠 首页</a></li>
+      <li class="sep"></li>
       <li class="section">分类</li>
-      <li><a href="#home" class="active" data-key="首页 经典力学 机器人学 五行阴阳 基督教 神学 音乐 诗歌" style="padding:10px 12px;font-size:15px;">🏠 首页</a></li>
-      <li><a href="#classical-mechanics" data-key="经典力学 牛顿 拉格朗日 哈密顿 力学">经典力学</a></li>
-      <li><a href="#robotics" data-key="机器人学 ROS 控制 感知 运动规划">机器人学</a></li>
-      <li><a href="#yin-yang" data-key="五行阴阳 中医 易经 气 太极">五行阴阳学说</a></li>
-      <li><a href="#theology" data-key="基督教 神学 圣经 信仰 神">基督教神学</a></li>
+      <li><a href="#classical-mechanics" data-key="经典力学 牛顿 拉格朗日 哈密顿 力学">📐 经典力学</a></li>
+      <li><a href="#robotics" data-key="机器人学 ROS 控制 感知 运动规划">🤖 机器人学</a></li>
+      <li><a href="#yin-yang" data-key="五行阴阳 中医 易经 气 太极">☯️ 五行阴阳</a></li>
+      <li><a href="#theology" data-key="基督教 神学 圣经 信仰 神">✝️ 基督教神学</a></li>
       <li class="sep"></li>
       <li class="section">其他</li>
-      <li><a href="#music" data-key="音乐 乐理 和声 作曲">音乐</a></li>
-      <li><a href="#poetry" data-key="诗歌 韵律 现代诗 古诗">诗歌</a></li>
-      <li><a href="#misc" data-key="杂项 其他 有趣 想法">杂项</a></li>
+      <li><a href="#music" data-key="音乐 乐理 和声 作曲">🎵 音乐</a></li>
+      <li><a href="#poetry" data-key="诗歌 韵律 现代诗 古诗">📜 诗歌</a></li>
+      <li><a href="#misc" data-key="杂项 其他 有趣 想法">🧩 杂项</a></li>
     </ul>
   </aside>
 
   <main class="main">
     <div class="topbar">
-      <button class="menu-btn" onclick="openSidebar()">☰ 导航</button>
-      <span style="font-size:12px;color:var(--muted);font-style:italic;">静态站点 · 经典风格 · KaTeX</span>
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
+      <span class="badge">V 2.0 · Modern</span>
     </div>
 
     <!-- HOME -->
     <section id="home">
-      <h1>欢迎来到我的私人物理宇宙</h1>
-      <p class="lead">一个物理学、机器人与形而上学的混合实验场。这里没有学科边界——只有好奇心和公式。</p>
+      <h1>私人物理宇宙</h1>
+      <p class="lead">物理学 × 机器人学 × 形而上学 · 一个没有边界的混合实验场</p>
+
       <div class="cards">
-        <div class="card" onclick="scrollToSection('classical-mechanics')"><h3>📐 经典力学</h3><p>牛顿、拉格朗日、哈密顿，从质点到场论。</p></div>
-        <div class="card" onclick="scrollToSection('robotics')"><h3>🤖 机器人学</h3><p>ROS、运动规划、具身智能，以及从拆零件到控制律的一切。</p></div>
-        <div class="card" onclick="scrollToSection('yin-yang')"><h3>☯️ 五行阴阳</h3><p>气、太极、易经，东方系统论的数学隐喻。</p></div>
-        <div class="card" onclick="scrollToSection('theology')"><h3>✝️ 基督教神学</h3><p>信仰、逻辑、历史与存在的交汇。</p></div>
-        <div class="card" onclick="scrollToSection('others')"><h3>🎵 音乐 / 诗歌 / 其他</h3><p>律动、韵脚，以及一切未分类的有趣之物。</p></div>
+        <div class="card" onclick="scrollToSection('classical-mechanics')">
+          <h3>📐 经典力学</h3>
+          <p>从牛顿到拉格朗日，从单摆到刚体旋量。</p>
+        </div>
+        <div class="card" onclick="scrollToSection('robotics')">
+          <h3>🤖 机器人学</h3>
+          <p>具身智能、运动规划、以及从废品到机器人的旅程。</p>
+        </div>
+        <div class="card" onclick="scrollToSection('yin-yang')">
+          <h3>☯️ 五行阴阳</h3>
+          <p>东方系统论的数学隐喻，相生相克即系统耦合。</p>
+        </div>
+        <div class="card" onclick="scrollToSection('theology')">
+          <h3>✝️ 基督教神学</h3>
+          <p>信仰与逻辑、历史与存在的交汇。</p>
+        </div>
+        <div class="card" onclick="scrollToSection('others')">
+          <h3>🎨 更多</h3>
+          <p>音乐、诗歌、以及一切有趣之物。</p>
+        </div>
       </div>
     </section>
 
@@ -156,8 +475,8 @@
 def diff_drive_step(x, y, theta, vr, vl, L, dt):
     v = (vr + vl) / 2
     w = (vr - vl) / L
-    x  += v * cos(theta) * dt
-    y  += v * sin(theta) * dt
+    x += v * cos(theta) * dt
+    y += v * sin(theta) * dt
     theta += w * dt
     return x, y, theta</code></pre>
     </section>
@@ -198,7 +517,8 @@ def diff_drive_step(x, y, theta, vr, vl, L, dt):
     </section>
 
     <div class="footer">
-      Built with static HTML + KaTeX · © Zion · 一个永不完结的宇宙
+      <span>© Zion</span>
+      <span style="color:var(--muted);font-size:11px;">一个永不完结的宇宙</span>
     </div>
   </main>
 </div>
@@ -236,7 +556,7 @@ function filterNav(q) {
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
-  const top = el.getBoundingClientRect().top + window.pageYOffset - 24;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
   window.scrollTo({ top, behavior: 'smooth' });
   closeSidebar();
 }
@@ -253,7 +573,7 @@ function closeSidebar() {
   sidebar.classList.remove('open');
   if (overlay) overlay.classList.remove('show');
 
-  if (window.innerWidth <= 860) {
+  if (window.innerWidth <= 880) {
     const hash = location.hash.slice(1);
     if (!hash || !['home','classical-mechanics','robotics','yin-yang','theology','music','poetry','misc'].includes(hash)) {
       history.replaceState(null, '', '#home');
