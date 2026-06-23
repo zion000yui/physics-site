@@ -30,6 +30,9 @@
   /* Layout */
   .app { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
   @media (max-width: 860px) { .app { grid-template-columns: 1fr; } .sidebar { display: none; } .sidebar.open { display: block; position: fixed; top: 0; left: 0; z-index: 50; height: 100vh; } }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 40; }
+  .overlay.show { display: block; }
+  @media (min-width: 861px) { .overlay.show { display: none !important; } }
 
   /* Sidebar */
   .sidebar { background: var(--bg2); border-right: 1px solid var(--border); padding: 32px 22px; position: sticky; top: 0; height: 100vh; overflow-y: auto; font-size: 14px; }
@@ -83,6 +86,7 @@
 </head>
 <body>
 <div class="app">
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       Zion 的私人物理宇宙
@@ -91,7 +95,7 @@
     <input class="search" id="search" placeholder="搜索文章..." oninput="filterNav(this.value)">
     <ul class="nav" id="nav">
       <li class="section">分类</li>
-      <li><a href="#home" class="active" data-key="首页 经典力学 机器人学 五行阴阳 基督教 神学 音乐 诗歌">首页</a></li>
+      <li><a href="#home" class="active" data-key="首页 经典力学 机器人学 五行阴阳 基督教 神学 音乐 诗歌" style="padding:10px 12px;font-size:15px;">🏠 首页</a></li>
       <li><a href="#classical-mechanics" data-key="经典力学 牛顿 拉格朗日 哈密顿 力学">经典力学</a></li>
       <li><a href="#robotics" data-key="机器人学 ROS 控制 感知 运动规划">机器人学</a></li>
       <li><a href="#yin-yang" data-key="五行阴阳 中医 易经 气 太极">五行阴阳学说</a></li>
@@ -217,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   nav.forEach(a => a.addEventListener('click', () => {
     activate(a.getAttribute('href').slice(1));
-    document.getElementById('sidebar').classList.remove('open');
+    closeSidebar();
   }));
   if (location.hash) activate(location.hash.slice(1));
 });
@@ -234,7 +238,21 @@ function scrollToSection(id) {
   if (!el) return;
   const top = el.getBoundingClientRect().top + window.pageYOffset - 24;
   window.scrollTo({ top, behavior: 'smooth' });
-  if (window.innerWidth <= 860) document.getElementById('sidebar').classList.remove('open');
+  closeSidebar();
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+
+  if (window.innerWidth <= 860) {
+    const hash = location.hash.slice(1);
+    if (!hash || !['home','classical-mechanics','robotics','yin-yang','theology','music','poetry','misc'].includes(hash)) {
+      history.replaceState(null, '', '#home');
+    }
+  }
 }
 </script>
 </body>
