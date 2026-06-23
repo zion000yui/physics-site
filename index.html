@@ -110,7 +110,7 @@
 
   <main class="main">
     <div class="topbar">
-      <button class="menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰ 导航</button>
+      <button class="menu-btn" onclick="openSidebar()">☰ 导航</button>
       <span style="font-size:12px;color:var(--muted);font-style:italic;">静态站点 · 经典风格 · KaTeX</span>
     </div>
 
@@ -241,11 +241,17 @@ function scrollToSection(id) {
   closeSidebar();
 }
 
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  const overlay = document.getElementById('overlay');
+  if (overlay) overlay.classList.add('show');
+}
+
 function closeSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('overlay');
   sidebar.classList.remove('open');
-  overlay.classList.remove('show');
+  if (overlay) overlay.classList.remove('show');
 
   if (window.innerWidth <= 860) {
     const hash = location.hash.slice(1);
