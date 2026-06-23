@@ -132,15 +132,18 @@
     max-width: 38em;
   }
 
-  /* Section article cards — borderless tweet style */
-  .section .card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 12px 0;
-    margin-bottom: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.08);
+  .card-link { text-decoration: none; color: inherit; display: block; }
+  .home-cards { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }
+
+  /* Base card (used for home category cards only) */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    transition: background 0.2s, box-shadow 0.2s;
   }
+  .card:hover { background: var(--bg3); }
   [data-theme="dark"] .section .card {
     border-bottom-color: rgba(255,255,255,0.1);
   }
