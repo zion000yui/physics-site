@@ -548,7 +548,8 @@
             <button class="btn btn-ghost" onclick="shareArticle()">🔗 转发</button>
           </div>
           <div class="detail-body" id="detailBody"></div>
-        </div>
+          <div id="giscus-mount"></div>
+      </div>
       </div>
 
 
@@ -822,7 +823,8 @@ const ARTICLE_MAP = {
   'cm-001': {
     title: '从牛顿第二定律到场论',
     meta: '经典力学 · 阅读 3 分钟',
-    body: '<p>这篇将从最朴素的 F = ma 出发，一步步过渡到拉格朗日量与欧拉-拉格朗日方程。</p>'
+    body: '<p>这篇将从最朴素的 $F=ma$ 出发，一步步过渡到拉格朗日量与欧拉\u2013拉格朗日方程。</p>'
+        + '<div class="card-equation" data-expr="S=\\int_{t_1}^{t_2} L(q,\\dot{q},t)\\,dt"><\/div>'
         + '<p>原理：系统的实际运动路径，使得作用量取驻值。</p>'
         + '<p>继续阅读：单摆、双摆、刚体、到场论的构造方法。</p>'
   }
@@ -834,7 +836,9 @@ function openDetail(id) {
   document.getElementById('detailTitle').textContent = article.title;
   document.getElementById('detailMeta').textContent = article.meta;
   document.getElementById('detailBody').innerHTML = article.body;
+  try { renderMathInElement(document.getElementById('detailBody'), {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]}); } catch (_) {}
   document.getElementById('detailOverlay').classList.add('show');
+  if (window.__giscus_init) { window.__giscus_init(); }
 }
 function closeDetail() {
   document.getElementById('detailOverlay').classList.remove('show');
@@ -856,5 +860,37 @@ async function shareArticle() {
   }
 }
 
+<script src="https://giscus.app/client.js"
+        data-repo="zion000yui/physics-site"
+        data-repo-id="R_kgDOTC-1Yw"
+        data-category="General"
+        data-category-id="DIC_kwDOTC-1Y84C_wxC"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="zh-CN"
+        crossorigin="anonymous"
+        async>
+</script>
+<script>
+window.getGiscusTheme = function () {
+  const theme = document.documentElement.getAttribute('data-theme') || 'light';
+  return theme === 'dark' ? 'dark' : 'light';
+};
+window.__giscus_init = function () {
+  const iframe = document.querySelector('.giscus-frame');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: window.getGiscusTheme() } } }, 'https://giscus.app');
+  }
+};
+window.addEventListener('message', (event) => {
+  if (event.origin !== 'https://giscus.app') return;
+  try { if (event.data.giscus) window.__giscus_init(); } catch (_) {}
+});
+window.addEventListener('hashchange', () => { window.__giscus_init && window.__giscus_init(); });
+</script>
 </body>
 </html>
