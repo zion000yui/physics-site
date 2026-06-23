@@ -138,26 +138,24 @@
   .card-link { text-decoration: none; color: inherit; display: block; }
   .home-cards { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }
 
-  /* Base card (used for home category cards only) */
-  .card {
+  /* Home category cards — visual blocks */
+  .home-cards .card {
     background: var(--bg2);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     padding: 14px 16px;
-    transition: background 0.2s, box-shadow 0.2s;
   }
-  .card:hover { background: var(--bg3); }
-  [data-theme="dark"] .section .card {
-    border-bottom-color: rgba(255,255,255,0.1);
-  }
-  .section .card:last-child {
-    border-bottom: none;
-  }
-  .section .card:active { transform: none; }
-  .section .card:hover { background: transparent; box-shadow: none; }
+  .home-cards .card:hover { background: var(--bg3); }
 
-  .card-link { text-decoration: none; color: inherit; display: block; }
-  .home-cards { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }
+  /* Feed article cards — fully borderless */
+  .section .card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 12px 0;
+  }
+  .section .card:hover { background: transparent; box-shadow: none; }
+  .section .card:active { transform: none; }
 
   .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .card-icon {
