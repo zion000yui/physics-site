@@ -163,8 +163,20 @@
     font-size: 24px;
     flex-shrink: 0;
   }
-  .card-title { font-size: 19px; font-weight: 800; line-height: 1.15; color: var(--fg); }
+  .card-title {
+    font-size: 19px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: #0f1419;
+  }
   .card-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+  [data-theme="dark"] .card-title {
+    color: #e7e9ea;
+  }
+  [data-theme="dark"] .card-body, [data-theme="dark"] .section-body {
+    color: #8b98a5;
+  }
 
   .card-body, .section-body {
     font-size: 15px;
