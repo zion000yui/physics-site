@@ -19,12 +19,12 @@
     --border: #eff3f4;
     --card-bg: #ffffff;
     --card-border: #eff3f4;
-    --shadow: none;
-    --radius: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --radius: 18px;
     --code-bg: #f5f5f5;
     --code-text: #7c3aed;
     --overlay-bg: rgba(0,0,0,0.4);
-    --nav-bg: rgba(255,255,255,0.92);
+    --nav-bg: rgba(255,255,255,0.96);
     --nav-border: #eff3f4;
     --bottom-nav-bg: rgba(255,255,255,0.95);
   }
@@ -40,12 +40,12 @@
     --border: #2f3336;
     --card-bg: #000000;
     --card-border: #2f3336;
-    --shadow: none;
-    --radius: 16px;
+    --shadow: 0 1px 3px rgba(255,255,255,0.04);
+    --radius: 18px;
     --code-bg: #16181c;
     --code-text: #c084fc;
     --overlay-bg: rgba(0,0,0,0.55);
-    --nav-bg: rgba(0,0,0,0.88);
+    --nav-bg: rgba(0,0,0,0.92);
     --nav-border: #2f3336;
     --bottom-nav-bg: rgba(0,0,0,0.95);
   }
@@ -57,8 +57,8 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
     background: var(--bg);
     color: var(--fg);
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 17px;
+    line-height: 1.65;
   }
 
   body {
@@ -78,7 +78,7 @@
     -webkit-backdrop-filter: blur(12px) saturate(180%);
     border-bottom: 1px solid var(--nav-border);
     padding: 0 20px;
-    height: 53px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -86,9 +86,9 @@
     transition: background 0.25s, border-color 0.25s;
   }
   .topnav-title {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 800;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.3px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -99,37 +99,36 @@
     background: transparent;
     border: none;
     color: var(--fg);
-    width: 34px; height: 34px;
+    width: 38px; height: 38px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 20px;
     transition: background 0.2s;
   }
   .icon-btn:hover { background: var(--bg3); }
 
   .pill {
-    padding: 7px 14px;
-    border-radius: 20px;
+    padding: 8px 16px;
+    border-radius: 22px;
     border: 1px solid var(--border);
     background: var(--card-bg);
     color: var(--fg);
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
   }
   .pill:hover { border-color: var(--accent); color: var(--accent); }
-  .pill.active { background: var(--bg3); font-weight: 700; }
 
   /* Feed */
   .feed {
-    max-width: 680px;
+    max-width: 720px;
     margin: 0 auto;
-    padding: 10px 16px 90px;
+    padding: 12px 16px 96px;
   }
 
   /* Cards */
@@ -137,89 +136,97 @@
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
-    padding: 18px 18px 16px;
-    margin-bottom: 10px;
+    padding: 20px 20px 16px;
+    margin-bottom: 12px;
     transition: background 0.25s, border-color 0.25s, box-shadow 0.2s;
     cursor: pointer;
   }
+  .card:active { transform: scale(0.995); }
   .card:hover {
     border-color: var(--accent);
-    box-shadow: 0 2px 12px rgba(29,155,240,0.08);
+    box-shadow: var(--shadow);
   }
   .card-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
   .card-icon {
-    width: 40px; height: 40px;
+    width: 46px; height: 46px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 24px;
     flex-shrink: 0;
   }
   .card-title {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 800;
     color: var(--fg);
     line-height: 1.2;
   }
   .card-meta {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
-    margin-top: 2px;
+    margin-top: 3px;
   }
 
   .card-body {
-    font-size: 15.5px;
-    line-height: 1.7;
+    font-size: 16.5px;
+    line-height: 1.75;
     color: var(--fg);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
-  .card-body p { margin: 0 0 10px; color: var(--fg); }
-  .card-body strong { font-weight: 700; color: var(--fg); }
-  .card-body em { font-style: italic; }
+  .card-body p { margin: 0 0 12px; color: var(--fg); }
+  .card-body strong { font-weight: 700; }
 
   .card-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 10px;
   }
   .tag {
-    font-size: 12px;
-    padding: 4px 10px;
-    border-radius: 18px;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 22px;
     background: var(--bg3);
     color: var(--muted);
     border: 1px solid var(--border);
-    font-weight: 500;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--bg2);
   }
 
   .card-equation {
-    margin: 10px 0;
-    padding: 12px;
+    margin: 14px 0;
+    padding: 16px;
     text-align: center;
     background: var(--bg2);
     border-radius: var(--radius);
     border: 1px solid var(--border);
-    font-size: 14px;
+    font-size: 15px;
     overflow-x: auto;
   }
-  .card-equation .katex { font-size: 1.1em; }
+  .card-equation .katex { font-size: 1.2em; }
 
   .card-code {
-    margin: 10px 0;
-    padding: 14px;
+    margin: 14px 0;
+    padding: 16px;
     background: var(--code-bg);
     border-radius: var(--radius);
     overflow-x: auto;
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.65;
     border: 1px solid var(--card-border);
   }
   .card-code code {
@@ -234,32 +241,49 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
-    padding-top: 10px;
+    margin-top: 6px;
+    padding-top: 12px;
     border-top: 1px solid var(--border);
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
   }
-  .card-footer-left { display: flex; gap: 14px; }
-  .card-footer-item { display: flex; align-items: center; gap: 5px; }
+  .card-footer-left { display: flex; gap: 18px; }
+  .card-footer-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    user-select: none;
+  }
+  .card-footer-item:active { transform: scale(1.15); }
+  .card-footer-item.liked { color: #f91880; font-weight: 700; }
+  .card-footer-item.liked .heart { animation: heartPop 0.35s ease; }
+
+  @keyframes heartPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+  }
 
   /* Hero */
   .hero {
-    margin-bottom: 18px;
-    padding: 24px 4px 10px;
+    margin-bottom: 20px;
+    padding: 28px 4px 12px;
   }
   .hero h1 {
-    font-size: clamp(30px, 5vw, 42px);
+    font-size: clamp(32px, 6vw, 46px);
     font-weight: 800;
     letter-spacing: -0.8px;
     line-height: 1.1;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    color: var(--fg);
   }
   .hero p {
-    font-size: 17px;
+    font-size: 18px;
     color: var(--muted);
-    line-height: 1.5;
-    margin-bottom: 14px;
+    line-height: 1.55;
+    margin-bottom: 18px;
   }
 
   /* Bottom Nav */
@@ -287,16 +311,16 @@
     border: none;
     color: var(--muted);
     font-size: 10px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     padding: 4px 10px;
     transition: color 0.2s;
     font-family: inherit;
   }
-  .bnav-item .bnav-icon { font-size: 22px; line-height: 1; }
+  .bnav-item .bnav-icon { font-size: 24px; line-height: 1; }
   .bnav-item.active { color: var(--accent); }
 
-  /* Sidebar overlay */
+  /* Overlay */
   .overlay {
     display: none;
     position: fixed;
@@ -328,8 +352,8 @@
   @media (min-width: 881px) {
     .sidebar {
       position: sticky;
-      top: 53px;
-      height: calc(100vh - 53px);
+      top: 56px;
+      height: calc(100vh - 56px);
       width: 260px;
       max-width: none;
       transform: none;
@@ -342,7 +366,7 @@
   }
 
   .sidebar-brand {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 800;
     margin-bottom: 20px;
     padding-bottom: 16px;
@@ -352,7 +376,7 @@
     display: block;
     font-size: 11px;
     color: var(--muted);
-    font-weight: 600;
+    font-weight: 700;
     margin-top: 4px;
     letter-spacing: 0.6px;
     text-transform: uppercase;
@@ -360,33 +384,33 @@
 
   .search {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px 14px;
     background: var(--bg2);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 14px;
     color: var(--fg);
-    font-size: 14px;
+    font-size: 15px;
     outline: none;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
   }
   .search:focus { border-color: var(--accent); }
 
   .nav-title {
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 1.4px;
     color: var(--muted);
     margin: 14px 10px 6px;
-    font-weight: 700;
+    font-weight: 800;
     opacity: 0.7;
   }
   .nav-item {
     display: block;
-    padding: 9px 12px;
-    border-radius: 12px;
+    padding: 11px 14px;
+    border-radius: 14px;
     color: var(--fg);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 15px;
+    font-weight: 600;
     margin: 2px 0;
     transition: background 0.15s;
   }
@@ -394,13 +418,14 @@
   .nav-item.active {
     background: var(--bg3);
     color: var(--accent);
-    font-weight: 700;
+    font-weight: 800;
   }
 
   @media (max-width: 880px) {
     .desktop-only { display: none !important; }
-    .feed { padding: 8px 12px 90px; }
-    .card { padding: 16px; }
+    .feed { padding: 8px 12px 96px; }
+    .card { padding: 18px; }
+    html { font-size: 17px; }
   }
   @media (min-width: 881px) {
     .mobile-only { display: none !important; }
@@ -428,9 +453,9 @@
     <div class="nav-title">导航</div>
     <a href="#home" class="nav-item active" data-key="首页">🏠 首页</a>
     <div class="nav-title">分类</div>
-    <a href="#classical-mechanics" class="nav-item" data-key="经典力学">📐 经典力学</a>
-    <a href="#robotics" class="nav-item" data-key="机器人学">🤖 机器人学</a>
-    <a href="#yin-yang" class="nav-item" data-key="五行阴阳">☯️ 五行阴阳</a>
+    <a href="#classical-mechanics" class="nav-item" data-key="经典力学 牛顿 拉格朗日 哈密顿">📐 经典力学</a>
+    <a href="#robotics" class="nav-item" data-key="机器人学 ROS 控制 运动规划">🤖 机器人学</a>
+    <a href="#yin-yang" class="nav-item" data-key="五行阴阳 金 木 水 火 土 太极">☯️ 五行阴阳</a>
     <a href="#theology" class="nav-item" data-key="基督教 神学">✝️ 基督教神学</a>
     <div class="nav-title">其他</div>
     <a href="#music" class="nav-item" data-key="音乐">🎵 音乐</a>
@@ -453,7 +478,7 @@
       <!-- HOME -->
       <section id="home" class="hero">
         <h1>私人物理宇宙</h1>
-        <p>物理学 × 机器人学 × 形而上学 · 一个没有边界的混合实验场</p>
+        <p style="font-size:19px;color:var(--muted);line-height:1.6;margin-bottom:20px;">物理学 × 机器人学 × 形而上学 · 一个没有边界的混合实验场</p>
         <div class="card-tags">
           <span class="tag" onclick="scrollToSection('classical-mechanics')" style="cursor:pointer;">📐 经典力学</span>
           <span class="tag" onclick="scrollToSection('robotics')" style="cursor:pointer;">🤖 机器人学</span>
@@ -464,7 +489,7 @@
       </section>
 
       <!-- 经典力学 -->
-      <article class="card" onclick="void(0)">
+      <article class="card" onclick="scrollToSection('classical-mechanics')">
         <div class="card-header">
           <div class="card-icon">📐</div>
           <div>
@@ -482,11 +507,16 @@
           <p>小角近似 $\sin\theta \approx \theta$ 可得简谐运动周期 $T = 2\pi\sqrt{\ell/g}$。</p>
         </div>
         <div class="card-tags">
-          <span class="tag">牛顿力学</span><span class="tag">拉格朗日</span><span class="tag">哈密顿</span><span class="tag">刚体</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-newton')">牛顿</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-lagrange')">拉格朗日</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-hamilton')">哈密顿</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-rigid')">刚体</span>
         </div>
         <div class="card-footer">
           <div class="card-footer-left">
-            <span class="card-footer-item">❤️ 12</span>
+            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
+              <span class="heart">♡</span> <span class="count">12</span>
+            </span>
             <span class="card-footer-item">💬 3</span>
           </div>
           <span>刚刚更新</span>
@@ -494,7 +524,7 @@
       </article>
 
       <!-- 机器人学 -->
-      <article class="card" onclick="void(0)">
+      <article class="card" onclick="scrollToSection('robotics')">
         <div class="card-header">
           <div class="card-icon">🤖</div>
           <div>
@@ -519,11 +549,16 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
     θ += w * dt
     return x, y, θ</code></div>
         <div class="card-tags">
-          <span class="tag">ROS</span><span class="tag">运动学</span><span class="tag">动力学</span><span class="tag">路径规划</span><span class="tag">SLAM</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('ros')">ROS</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('kinematics')">运动学</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('dynamics')">动力学</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('path-planning')">路径规划</span>
         </div>
         <div class="card-footer">
           <div class="card-footer-left">
-            <span class="card-footer-item">❤️ 24</span>
+            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
+              <span class="heart">♡</span> <span class="count">24</span>
+            </span>
             <span class="card-footer-item">💬 7</span>
           </div>
           <span>2 小时前</span>
@@ -531,7 +566,7 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
       </article>
 
       <!-- 五行阴阳 -->
-      <article class="card" onclick="void(0)">
+      <article class="card" onclick="scrollToSection('yin-yang')">
         <div class="card-header">
           <div class="card-icon">☯️</div>
           <div>
@@ -541,16 +576,24 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
         </div>
         <div class="card-body">
           <p>东方系统论：相生相克、太极两仪、四象八卦。尝试用系统思维与数学结构理解它。</p>
+          <strong>五行元素符号</strong>
+          <p>🟢 木 — 生长、舒展、青色<br>🔴 火 — 炎热、上升、红色<br>🟡 土 — 承载、孕育、黄色<br>⚪ 金 — 收敛、肃杀、白色<br>🔵 水 — 润下、寒凉、黑色</p>
           <strong>示例：五行相生循环</strong>
           <div class="card-equation" data-expr="\text{木} \rightarrow \text{火} \rightarrow \text{土} \rightarrow \text{金} \rightarrow \text{水} \rightarrow \text{木}"></div>
           <p>可抽象为有向循环图，节点集合 $V = \{W, F, E, M, Wa\}$，边集 $E = \{(W,F), (F,E), (E,M), (M,Wa), (Wa,W)\}$。</p>
         </div>
         <div class="card-tags">
-          <span class="tag">太极</span><span class="tag">阴阳</span><span class="tag">五行</span><span class="tag">八卦</span><span class="tag">系统论</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('wood')">🟢 木</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('fire')">🔴 火</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('earth')">🟡 土</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('metal')">⚪ 金</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('water')">🔵 水</span>
         </div>
         <div class="card-footer">
           <div class="card-footer-left">
-            <span class="card-footer-item">❤️ 8</span>
+            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
+              <span class="heart">♡</span> <span class="count">8</span>
+            </span>
             <span class="card-footer-item">💬 2</span>
           </div>
           <span>昨天</span>
@@ -558,7 +601,7 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
       </article>
 
       <!-- 基督教神学 -->
-      <article class="card" onclick="void(0)">
+      <article class="card" onclick="scrollToSection('theology')">
         <div class="card-header">
           <div class="card-icon">✝️</div>
           <div>
@@ -572,11 +615,15 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
           <p>一个上帝，三个位格：圣父、圣子、圣灵。传统表述为 <em>one ousia, three hypostases</em>（一位格，三个实体）。这是一个非平凡的系统结构问题，而非简单的 1+1+1。</p>
         </div>
         <div class="card-tags">
-          <span class="tag">圣经研究</span><span class="tag">系统神学</span><span class="tag">历史</span><span class="tag">护教</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('bible')">圣经研究</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('systematic')">系统神学</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('history')">历史</span>
         </div>
         <div class="card-footer">
           <div class="card-footer-left">
-            <span class="card-footer-item">❤️ 15</span>
+            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
+              <span class="heart">♡</span> <span class="count">15</span>
+            </span>
             <span class="card-footer-item">💬 5</span>
           </div>
           <span>3 天前</span>
@@ -584,7 +631,7 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
       </article>
 
       <!-- 其他 -->
-      <article class="card" onclick="void(0)">
+      <article class="card" onclick="scrollToSection('others')">
         <div class="card-header">
           <div class="card-icon">🎨</div>
           <div>
@@ -597,18 +644,22 @@ def diff_drive_step(x, y, θ, vr, vl, L, dt):
           <p>🎵 乐理笔记、和声练习、以及用代码生成音乐的想法。<br>📜 旧诗新写，以及写着玩的现代诗。<br>🧩 未分类的思考、实验、发现、碎片。</p>
         </div>
         <div class="card-tags">
-          <span class="tag">音乐</span><span class="tag">诗歌</span><span class="tag">杂项</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('music')">音乐</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('poetry')">诗歌</span>
+          <span class="tag" onclick="event.stopPropagation(); scrollToSection('misc')">杂项</span>
         </div>
         <div class="card-footer">
           <div class="card-footer-left">
-            <span class="card-footer-item">❤️ 6</span>
+            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
+              <span class="heart">♡</span> <span class="count">6</span>
+            </span>
             <span class="card-footer-item">💬 1</span>
           </div>
           <span>1 周前</span>
         </div>
       </article>
 
-      <div style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">
+      <div style="text-align:center;padding:28px;color:var(--muted);font-size:15px;font-weight:600;">
         — 已到底部，更多内容持续更新中 —
       </div>
     </div>
@@ -652,8 +703,8 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = saved || (prefersDark ? 'dark' : 'light');
+  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const theme = saved || (prefersLight ? 'light' : 'dark');
   document.documentElement.setAttribute('data-theme', theme);
   updateThemeBtn(theme);
 });
@@ -700,6 +751,17 @@ function scrollToSection(id) {
   const top = el.getBoundingClientRect().top + window.pageYOffset - (id === 'home' ? 0 : 70);
   window.scrollTo({ top, behavior: 'smooth' });
   closeSidebar();
+}
+
+function toggleLike(item) {
+  const heart = item.querySelector('.heart');
+  const count = item.querySelector('.count');
+  if (!heart || !count) return;
+
+  const isLiked = item.classList.toggle('liked');
+  let n = parseInt(count.textContent, 10) || 0;
+  count.textContent = isLiked ? n + 1 : Math.max(0, n - 1);
+  heart.textContent = isLiked ? '♥' : '♡';
 }
 </script>
 </body>
