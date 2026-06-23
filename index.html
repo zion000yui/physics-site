@@ -97,16 +97,22 @@
     background: transparent;
     border: none;
     color: var(--fg);
-    width: 38px; height: 38px;
-    border-radius: 50%;
+    width: auto;
+    height: 36px;
+    padding: 0 14px;
+    border-radius: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 7px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 15px;
+    font-weight: 700;
     transition: background 0.2s;
+    font-family: inherit;
   }
-  .icon-btn:hover { background: var(--bg3); }
+  .icon-btn:hover { background: rgba(255,255,255,0.08); }
+  [data-theme="light"] .icon-btn:hover { background: var(--bg3); }
 
   .pill {
     padding: 8px 16px;
@@ -119,6 +125,7 @@
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
+    font-family: inherit;
   }
   .pill:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -438,193 +445,71 @@
     </div>
 
     <div class="feed">
-      <!-- HOME -->
-      <section id="home" class="hero">
-        <h1>私人物理宇宙</h1>
-        <p style="font-size:19px;color:var(--muted);line-height:1.6;margin-bottom:20px;">物理学 × 机器人学 × 形而上学 · 一个没有边界的混合实验场</p>
-        <div class="card-tags">
-          <span class="tag" onclick="scrollToSection('classical-mechanics')" style="cursor:pointer;">📐 经典力学</span>
-          <span class="tag" onclick="scrollToSection('robotics')" style="cursor:pointer;">🤖 机器人学</span>
-          <span class="tag" onclick="scrollToSection('yin-yang')" style="cursor:pointer;">☯️ 五行阴阳</span>
-          <span class="tag" onclick="scrollToSection('theology')" style="cursor:pointer;">✝️ 神学</span>
-          <span class="tag" onclick="scrollToSection('others')" style="cursor:pointer;">🎨 其他</span>
-        </div>
-      </section>
-
-      <!-- 经典力学 -->
-      <article class="card" onclick="scrollToSection('classical-mechanics')">
+      <!-- HOME cards -- screenshot exact copy -->
+      <article class="card" onclick="scrollToSection('classical-mechanics')" style="cursor:pointer;">
         <div class="card-header">
-          <div class="card-icon">📐</div>
+          <div class="card-icon" style="background:linear-gradient(135deg,#22d3ee,#1d9bf0);width:44px;height:44px;font-size:22px;">▶</div>
           <div>
-            <div class="card-title">经典力学</div>
+            <div class="card-title" style="font-size:17px;">经典力学</div>
             <div class="card-meta">5 篇文章</div>
           </div>
         </div>
-        <div class="card-body">
-          <p>从最朴素的牛顿第二定律到场论的欧拉-拉格朗日方程。这里记录推导、直觉和习题。</p>
-          <strong>示例：单摆的拉格朗日量</strong>
-          <p>对于摆长为 $\ell$、质量为 $m$ 的单摆，广义坐标取角度 $\theta$：</p>
-          <div class="card-equation" data-expr="L = T - V = \frac{1}{2} m \ell^2 \dot{\theta}^2 - mg\ell(1-\cos\theta)"></div>
-          <p>代入欧拉-拉格朗日方程：</p>
-          <div class="card-equation" data-expr="\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta}} - \frac{\partial L}{\partial \theta} = 0 \;\Longrightarrow\; \ddot{\theta} + \frac{g}{\ell}\sin\theta = 0"></div>
-          <p>小角近似 $\sin\theta \approx \theta$ 可得简谐运动周期 $T = 2\pi\sqrt{\ell/g}$。</p>
-        </div>
-        <div class="card-tags">
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-newton')">牛顿</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-lagrange')">拉格朗日</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-hamilton')">哈密顿</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('mechanics-rigid')">刚体</span>
-        </div>
-        <div class="card-footer">
-          <div class="card-footer-left">
-            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
-              <span class="heart">♡</span> <span class="count">12</span>
-            </span>
-            <span class="card-footer-item">💬 3</span>
-          </div>
-          <span>刚刚更新</span>
+        <div class="card-body" style="font-size:15px;color:var(--muted);">
+          <p>牛顿、拉格朗日、哈密顿，从质点到场论。</p>
         </div>
       </article>
 
-      <!-- 机器人学 -->
-      <article class="card" onclick="scrollToSection('robotics')">
+      <article class="card" onclick="scrollToSection('robotics')" style="cursor:pointer;">
         <div class="card-header">
-          <div class="card-icon">🤖</div>
+          <div class="card-icon" style="background:linear-gradient(135deg,#94a3b8,#475569);width:44px;height:44px;font-size:22px;">🤖</div>
           <div>
-            <div class="card-title">机器人学</div>
+            <div class="card-title" style="font-size:17px;">机器人学</div>
             <div class="card-meta">8 篇文章</div>
           </div>
         </div>
-        <div class="card-body">
-          <p>从废旧零件到具身智能。理论、代码与硬件记录。</p>
-          <strong>示例：两轮差速运动学</strong>
-          <p>左右轮速度 $v_r, v_l$，轴距 $L$：</p>
-          <div class="card-equation" data-expr="v = \frac{v_r + v_l}{2}, \quad \omega = \frac{v_r - v_l}{L}"></div>
-          <p>位姿更新：</p>
-          <div class="card-equation" data-expr="\dot{x} = v\cos\theta, \quad \dot{y} = v\sin\theta, \quad \dot{\theta} = \omega"></div>
-        </div>
-        <div class="card-code"><code># 离散迭代示例
-def diff_drive_step(x, y, θ, vr, vl, L, dt):
-    v = (vr + vl) / 2
-    w = (vr - vl) / L
-    x += v * cos(θ) * dt
-    y += v * sin(θ) * dt
-    θ += w * dt
-    return x, y, θ</code></div>
-        <div class="card-tags">
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('ros')">ROS</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('kinematics')">运动学</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('dynamics')">动力学</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('path-planning')">路径规划</span>
-        </div>
-        <div class="card-footer">
-          <div class="card-footer-left">
-            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
-              <span class="heart">♡</span> <span class="count">24</span>
-            </span>
-            <span class="card-footer-item">💬 7</span>
-          </div>
-          <span>2 小时前</span>
+        <div class="card-body" style="font-size:15px;color:var(--muted);">
+          <p>ROS、运动规划、具身智能、从拆零件到控制律。</p>
         </div>
       </article>
 
-      <!-- 五行阴阳 -->
-      <article class="card" onclick="scrollToSection('yin-yang')">
+      <article class="card" onclick="scrollToSection('yin-yang')" style="cursor:pointer;">
         <div class="card-header">
-          <div class="card-icon">☯️</div>
+          <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed);width:44px;height:44px;font-size:22px;">☯️</div>
           <div>
-            <div class="card-title">五行阴阳学说</div>
+            <div class="card-title" style="font-size:17px;">五行阴阳</div>
             <div class="card-meta">3 篇文章</div>
           </div>
         </div>
-        <div class="card-body">
-          <p>东方系统论：相生相克、太极两仪、四象八卦。尝试用系统思维与数学结构理解它。</p>
-          <strong>五行元素符号</strong>
-          <p>🟢 木 — 生长、舒展、青色<br>🔴 火 — 炎热、上升、红色<br>🟡 土 — 承载、孕育、黄色<br>⚪ 金 — 收敛、肃杀、白色<br>🔵 水 — 润下、寒凉、黑色</p>
-          <strong>示例：五行相生循环</strong>
-          <div class="card-equation" data-expr="\text{木} \rightarrow \text{火} \rightarrow \text{土} \rightarrow \text{金} \rightarrow \text{水} \rightarrow \text{木}"></div>
-          <p>可抽象为有向循环图，节点集合 $V = \{W, F, E, M, Wa\}$，边集 $E = \{(W,F), (F,E), (E,M), (M,Wa), (Wa,W)\}$。</p>
-        </div>
-        <div class="card-tags">
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('wood')">🟢 木</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('fire')">🔴 火</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('earth')">🟡 土</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('metal')">⚪ 金</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('water')">🔵 水</span>
-        </div>
-        <div class="card-footer">
-          <div class="card-footer-left">
-            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
-              <span class="heart">♡</span> <span class="count">8</span>
-            </span>
-            <span class="card-footer-item">💬 2</span>
-          </div>
-          <span>昨天</span>
+        <div class="card-body" style="font-size:15px;color:var(--muted);">
+          <p>气、太极、易经，东方系统的数学隐喻。</p>
         </div>
       </article>
 
-      <!-- 基督教神学 -->
-      <article class="card" onclick="scrollToSection('theology')">
+      <article class="card" onclick="scrollToSection('theology')" style="cursor:pointer;">
         <div class="card-header">
-          <div class="card-icon">✝️</div>
+          <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed);width:44px;height:44px;font-size:22px;">✝️</div>
           <div>
-            <div class="card-title">基督教神学</div>
+            <div class="card-title" style="font-size:17px;">基督教神学</div>
             <div class="card-meta">4 篇文章</div>
           </div>
         </div>
-        <div class="card-body">
-          <p>信仰与理性的对话。</p>
-          <strong>示例：三位一体逻辑结构</strong>
-          <p>一个上帝，三个位格：圣父、圣子、圣灵。传统表述为 <em>one ousia, three hypostases</em>（一位格，三个实体）。这是一个非平凡的系统结构问题，而非简单的 1+1+1。</p>
-        </div>
-        <div class="card-tags">
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('bible')">圣经研究</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('systematic')">系统神学</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('history')">历史</span>
-        </div>
-        <div class="card-footer">
-          <div class="card-footer-left">
-            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
-              <span class="heart">♡</span> <span class="count">15</span>
-            </span>
-            <span class="card-footer-item">💬 5</span>
-          </div>
-          <span>3 天前</span>
+        <div class="card-body" style="font-size:15px;color:var(--muted);">
+          <p>信仰、逻辑、历史与存在的交汇。</p>
         </div>
       </article>
 
-      <!-- 其他 -->
-      <article class="card" onclick="scrollToSection('others')">
+      <article class="card" onclick="scrollToSection('others')" style="cursor:pointer;">
         <div class="card-header">
-          <div class="card-icon">🎨</div>
+          <div class="card-icon" style="background:linear-gradient(135deg,#94a3b8,#475569);width:44px;height:44px;font-size:22px;">♪</div>
           <div>
-            <div class="card-title">其他</div>
-            <div class="card-meta">音乐 · 诗歌 · 杂项</div>
+            <div class="card-title" style="font-size:17px;">音乐 / 诗歌 / 其他</div>
+            <div class="card-meta">6 篇文章</div>
           </div>
         </div>
-        <div class="card-body">
-          <p>音乐、诗歌、以及一切有趣但未分类的东西。</p>
-          <p>🎵 乐理笔记、和声练习、以及用代码生成音乐的想法。<br>📜 旧诗新写，以及写着玩的现代诗。<br>🧩 未分类的思考、实验、发现、碎片。</p>
-        </div>
-        <div class="card-tags">
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('music')">音乐</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('poetry')">诗歌</span>
-          <span class="tag" onclick="event.stopPropagation(); scrollToSection('misc')">杂项</span>
-        </div>
-        <div class="card-footer">
-          <div class="card-footer-left">
-            <span class="card-footer-item" onclick="event.stopPropagation(); toggleLike(this)">
-              <span class="heart">♡</span> <span class="count">6</span>
-            </span>
-            <span class="card-footer-item">💬 1</span>
-          </div>
-          <span>1 周前</span>
+        <div class="card-body" style="font-size:15px;color:var(--muted);">
+          <p>律动、韵脚，以及一切未分类的有趣之物。</p>
         </div>
       </article>
-
-      <div style="text-align:center;padding:28px;color:var(--muted);font-size:15px;font-weight:600;">
-        — 已到底部，更多内容持续更新中 —
-      </div>
     </div>
   </main>
 </div>
