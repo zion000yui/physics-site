@@ -12,41 +12,44 @@
     --bg: #ffffff;
     --bg2: #f7f9f9;
     --bg3: #eff3f4;
-    --fg: #0f1419;
+    --fg: #000000;
     --muted: #536471;
     --accent: #1d9bf0;
     --accent2: #7c3aed;
     --border: #eff3f4;
     --card-bg: #ffffff;
     --card-border: #eff3f4;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow: 0 1px 3px rgba(0,0,0,0.08);
     --radius: 18px;
     --code-bg: #f5f5f5;
     --code-text: #7c3aed;
-    --overlay-bg: rgba(0,0,0,0.4);
+    --overlay-bg: rgba(0,0,0,0.35);
     --nav-bg: rgba(255,255,255,0.96);
     --nav-border: #eff3f4;
     --like: #f91880;
+    --topbar-bg: #ffffff;
+    --input-bg: #f7f9f9;
   }
 
   [data-theme="dark"] {
     --bg: #000000;
-    --bg2: #16181c;
-    --bg3: #1d1f23;
+    --bg2: #111111;
+    --bg3: #1a1d20;
     --fg: #e7e9ea;
     --muted: #8b98a5;
     --accent: #1d9bf0;
     --accent2: #c084fc;
     --border: #2f3336;
-    --card-bg: #000000;
-    --card-border: #2f3336;
-    --shadow: 0 1px 3px rgba(255,255,255,0.04);
-    --radius: 18px;
-    --code-bg: #16181c;
+    --card-bg: #0f1315;
+    --card-border: #1d1f23;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35);
+    --code-bg: #0d1117;
     --code-text: #c084fc;
-    --overlay-bg: rgba(0,0,0,0.55);
-    --nav-bg: rgba(0,0,0,0.92);
+    --overlay-bg: rgba(0,0,0,0.6);
+    --nav-bg: rgba(0,0,0,0.96);
     --nav-border: #2f3336;
+    --topbar-bg: #000000;
+    --input-bg: #1a1d20;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,23 +67,16 @@
     min-height: 100vh;
     overflow-x: hidden;
     background: var(--bg);
-    transition: background 0.25s, color 0.25s;
   }
 
-  .app {
-    max-width: 720px;
-    margin: 0 auto;
-    position: relative;
-  }
+  .app { max-width: 720px; margin: 0 auto; position: relative; }
 
   /* Top bar */
   .topbar {
     position: sticky;
     top: 0;
     z-index: 30;
-    background: var(--nav-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    background: var(--topbar-bg);
     border-bottom: 1px solid var(--nav-border);
     padding: 0 18px;
     height: 54px;
@@ -96,7 +92,6 @@
     letter-spacing: 0.2px;
   }
 
-  /* Buttons */
   .btn {
     background: transparent;
     border: none;
@@ -112,27 +107,26 @@
     align-items: center;
     gap: 8px;
   }
-  .btn:hover { background: rgba(128,128,128,0.12); }
-  .btn-ghost { border: 1px solid var(--border); background: var(--card-bg); }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn:hover { background: rgba(255,255,255,0.08); }
+  .btn-ghost { border: 1px solid var(--border); }
 
   /* Feed */
-  .feed { padding: 10px 14px 80px; }
+  .feed { padding: 10px 16px 80px; }
 
   /* Hero */
   .hero {
-    padding: 28px 6px 14px;
+    padding: 30px 4px 16px;
     margin-bottom: 6px;
   }
   .hero h1 {
-    font-size: clamp(34px, 6.6vw, 52px);
+    font-size: clamp(36px, 7vw, 56px);
     font-weight: 800;
     letter-spacing: -1px;
     line-height: 1.05;
-    color: var(--fg);
+    color: #ffffff;
   }
   .hero p {
-    font-size: 19px;
+    font-size: 18px;
     color: var(--muted);
     margin-top: 12px;
     line-height: 1.55;
@@ -140,17 +134,22 @@
   }
 
   /* Card */
+  .card, .section, .card-body, .section-body {
+    background: transparent;
+  }
+
   .card {
-    background: var(--card-bg);
+    background: var(--bg2);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
-    padding: 19px 19px 16px;
+    padding: 19px 20px 16px;
     margin-bottom: 12px;
     transition: background 0.25s, border-color 0.25s, box-shadow 0.2s, transform 0.15s;
   }
-  .card-link { text-decoration: none; color: inherit; display: block; }
   .card:active { transform: scale(0.997); }
-  .card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+  .card:hover { border-color: #2f3336; box-shadow: var(--shadow); }
+
+  .card-link { text-decoration: none; color: inherit; display: block; }
 
   .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .card-icon {
@@ -163,12 +162,16 @@
     font-size: 24px;
     flex-shrink: 0;
   }
-  .card-title { font-size: 19px; font-weight: 800; line-height: 1.15; color: var(--fg); }
+  .card-title { font-size: 19px; font-weight: 800; line-height: 1.15; color: #ffffff; }
   .card-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
 
-  .card-body { font-size: 16.5px; line-height: 1.75; color: var(--fg); }
-  .card-body p { margin: 0 0 12px; color: var(--fg); }
-  .card-body strong { font-weight: 700; }
+  .card-body, .section-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+  .card-body p, .section-body p { margin: 0 0 12px; }
+  .card-body strong, .section-body strong { font-weight: 700; }
 
   .card-code {
     margin: 14px 0;
@@ -187,10 +190,10 @@
     margin: 14px 0;
     padding: 18px;
     text-align: center;
-    background: var(--bg2);
+    background: rgba(255,255,255,0.03);
     border-radius: var(--radius);
     border: 1px solid var(--border);
-    font-size: 16px;
+    font-size: 15px;
     overflow-x: auto;
   }
 
@@ -233,15 +236,19 @@
     100% { transform: scale(1); }
   }
 
-  /* Sections below feed */
-  .section { margin-top: 8px; }
+  /* Sections */
+  .section { margin-top: 10px; }
   .section-title {
     font-size: 22px;
     font-weight: 800;
     padding: 0 6px 10px;
-    color: var(--fg);
+    color: #ffffff;
   }
-  .section-body { font-size: 16.5px; line-height: 1.75; color: var(--fg); }
+  .section-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
   .section-body p { margin: 0 0 12px; }
 
   /* Overlay */
@@ -284,8 +291,6 @@
     width: 280px;
     max-width: 82vw;
     background: var(--nav-bg);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-right: 1px solid var(--nav-border);
     z-index: 50;
     transform: translateX(-100%);
@@ -297,7 +302,7 @@
   }
   @media (max-width: 880px) {
     .desktop-only { display: none !important; }
-    html { font-size: 18px; }
+    html { font-size: 17px; }
   }
   .sidebar.open { transform: translateX(0); }
 
@@ -307,6 +312,7 @@
     margin-bottom: 18px;
     padding-bottom: 14px;
     border-bottom: 1px solid var(--border);
+    color: #ffffff;
   }
   .sidebar-brand small {
     display: block;
@@ -321,7 +327,7 @@
   .search {
     width: 100%;
     padding: 12px 14px;
-    background: var(--bg2);
+    background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 14px;
     color: var(--fg);
@@ -360,7 +366,7 @@
   /* Scrollbar */
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.22); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -392,7 +398,6 @@
     </div>
   </aside>
 
-  <!-- Content -->
   <main>
     <header class="topbar">
       <div class="topbar-left">
@@ -400,7 +405,7 @@
         <span class="topbar-label">三 导航</span>
       </div>
       <div class="topbar-right">
-        <span class="topbar-label desktop-only">静态站点 · Web 信息流 · KaTeX</span>
+        <span class="topbar-label desktop-only">静态站点 · 暗色极客风 · KaTeX</span>
         <button class="btn btn-ghost mobile-only" onclick="toggleTheme()" id="themeMobile" style="padding:10px 12px;">🌙</button>
       </div>
     </header>
@@ -420,7 +425,7 @@
             <div class="card-meta">5 篇</div>
           </div>
         </div>
-        <div class="card-body" style="font-size:16px;color:var(--muted);">
+        <div class="card-body">
           <p>牛顿、拉格朗日、哈密顿，从质点到场论。</p>
         </div>
       </a>
@@ -433,7 +438,7 @@
             <div class="card-meta">8 篇</div>
           </div>
         </div>
-        <div class="card-body" style="font-size:16px;color:var(--muted);">
+        <div class="card-body">
           <p>ROS、运动规划、具身智能、从拆零件到控制律。</p>
         </div>
       </a>
@@ -446,7 +451,7 @@
             <div class="card-meta">3 篇</div>
           </div>
         </div>
-        <div class="card-body" style="font-size:16px;color:var(--muted);">
+        <div class="card-body">
           <p>气、太极、易经，东方系统的数学隐喻。</p>
         </div>
       </a>
@@ -459,7 +464,7 @@
             <div class="card-meta">4 篇</div>
           </div>
         </div>
-        <div class="card-body" style="font-size:16px;color:var(--muted);">
+        <div class="card-body">
           <p>信仰、逻辑、历史与存在的交汇。</p>
         </div>
       </a>
@@ -472,7 +477,7 @@
             <div class="card-meta">6 篇</div>
           </div>
         </div>
-        <div class="card-body" style="font-size:16px;color:var(--muted);">
+        <div class="card-body">
           <p>律动、韵脚，以及一切未分类的有趣之物。</p>
         </div>
       </a>
@@ -690,17 +695,18 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   const saved = localStorage.getItem('theme');
-  const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-  const theme = saved || (prefersLight ? 'light' : 'dark');
+  // Default light unless user previously chose dark
+  const theme = saved || 'light';
   document.documentElement.setAttribute('data-theme', theme);
   updateThemeBtn();
 });
 
 function updateThemeBtn() {
   const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  document.getElementById('themeMobile').textContent = theme === 'dark' ? '☀️' : '🌙';
+  const isDark = theme === 'dark';
+  document.getElementById('themeMobile').textContent = isDark ? '☀️' : '🌙';
   const icon = document.getElementById('themeIconDesktop');
-  if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+  if (icon) icon.textContent = isDark ? '☀️' : '🌙';
 }
 
 function toggleTheme() {
@@ -710,14 +716,12 @@ function toggleTheme() {
   localStorage.setItem('theme', next);
   updateThemeBtn();
 }
-
 function filterNav(q) {
   const qq = q.toLowerCase();
   document.querySelectorAll('#sidebar a[data-key]').forEach(a => {
     a.style.display = (!qq || (a.dataset.key || '').includes(qq)) ? '' : 'none';
   });
 }
-
 function openSidebar() {
   document.getElementById('sidebar').classList.add('open');
   document.getElementById('overlay').classList.add('show');
@@ -726,7 +730,6 @@ function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('show');
 }
-
 function scrollToSection(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -734,7 +737,6 @@ function scrollToSection(id) {
   window.scrollTo({ top, behavior: 'smooth' });
   closeSidebar();
 }
-
 function toggleLike(item) {
   const count = item.querySelector('.count');
   const heart = item.querySelector('.heart');
@@ -744,13 +746,6 @@ function toggleLike(item) {
   count.textContent = liked ? n + 1 : Math.max(0, n - 1);
   heart.textContent = liked ? '♥' : '♡';
 }
-
-document.querySelectorAll('#sidebar a').forEach(a => {
-  a.addEventListener('click', function() {
-    document.querySelectorAll('#sidebar a').forEach(x => x.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
 </script>
 </body>
 </html>
