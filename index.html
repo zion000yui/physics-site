@@ -879,6 +879,153 @@ async function shareArticle() {
         async>
 </script>
 <script>
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('detailTitle')) return;
+
+  // ---- Theme
+  const saved = localStorage.getItem('theme');
+  const theme = saved || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  const themeLabelMap = { light: '🌙', dark: '☀️' };
+  window.toggleTheme = function () {
+    const cur = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    ['themeIconDesktop','themeMobile'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = themeLabelMap[next] || '🌙';
+    });
+    if (window.getGiscusTheme) {
+      setTimeout(() => window.getGiscusTheme && window.getGiscusTheme(), 60);
+    }
+  };
+  ['themeIconDesktop','themeMobile'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = themeLabelMap[theme] || '🌙';
+  });
+
+  // ---- Sidebar
+  let nav = 0, lastQuery = '';
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => setTimeout(() => closeSidebar(), 0));
+  });
+  window.openSidebar = window.openDetailSidebar = function () {
+    nav = 1; document.getElementById('overlay').classList.add('show');
+    document.getElementById('sidebar').classList.add('open');
+  };
+  window.closeSidebar = function () {
+    nav = 0; document.getElementById('overlay').classList.remove('show');
+    document.getElementById('sidebar').classList.remove('open');
+  };
+
+  // ---- Search
+  window.filterNav = function (q) {
+    lastQuery = (q || '').toLowerCase();
+    document.querySelectorAll('.nav-item').forEach(el => {
+      const txt = ((el.getAttribute('data-key') || '') + ' ' + (el.textContent || '')).toLowerCase();
+      el.style.display = (!lastQuery || txt.includes(lastQuery)) ? '' :
+        (el.style.cssText += ';display:none', 'none');
+    });
+  };
+
+  // ---- Scroll-to-section
+  window.scrollToSection = function (id) {
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 62;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  };
+
+  // ---- Like
+  window.toggleLike = function (item) {
+    const count = item.querySelector('.count');
+    const heart = item.querySelector('.heart');
+    if (!count || !heart) return;
+    const liked = item.classList.contains('liked');
+    let n = parseInt(count.textContent, 10) || 0;
+    if (!liked) {
+      item.classList.add('liked');
+      count.textContent = n + 1;
+      heart.textContent = '♥';
+    }
+  };
+
+  // ---- Click comment btn -> detail
+  document.querySelectorAll('.card-footer-item').forEach((el, idx) => {
+    if (!el.textContent.includes('💬')) return;
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      openDetail('cm-001');
+    });
+  });
+
+  // ---- Article map + detail
+  window.ARTICLE_MAP = {
+    'cm-001': {
+      title: '从牛顿第二定律到场论',
+      meta: '经典力学 · 阅读 3 分钟',
+      body: '<p>这篇将从最朴素的 $F=ma$ 出发，一步步过渡到拉格朗日量与欧拉\u2013拉格朗日方程。</p>'
+          + '<p>原理：系统的实际运动路径，使得作用量取驻值。</p>'
+          + '<p>继续阅读：单摆、双摆、刚体、到场论的构造方法。</p>'
+    }
+  };
+  window.openDetail = function (id) {
+    const article = window.ARTICLE_MAP[id];
+    if (!article) return;
+    const titleEl = document.getElementById('detailTitle');
+    const metaEl = document.getElementById('detailMeta');
+    titleEl.textContent = article.title;
+    if (metaEl) metaEl.textContent = article.meta;
+    document.getElementById('detailBody').innerHTML = article.body;
+    const overlay = document.getElementById('detailOverlay');
+    overlay.classList.add('show');
+    overlay.dataset.section = 'detail';
+    setTimeout(() => {
+      const mount = document.getElementById('giscus-mount');
+      if (mount) mount.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 320);
+    setTimeout(() => {
+      const frame = document.querySelector('.giscus-frame');
+      if (frame) frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 900);
+  };
+  if (document.getElementById('detailOverlay')) {
+    document.getElementById('detailOverlay').addEventListener('click', (e) => {
+      if (e.target.id === 'detailOverlay') closeDetail();
+    });
+  }
+
+  // ---- share
+  window.shareArticle = async function () {
+    const url = location.href;
+    const title = document.getElementById('detailTitle')?.textContent || '';
+    try {
+      if (navigator.share) return await navigator.share({ title, url });
+      await navigator.clipboard.writeText(url);
+      alert('链接已复制，可分享给朋友。');
+    } catch (_) { /* cancel */ }
+  };
+
+  // ---- Home cards click -> detail for cm-001 / others -> scroll
+  document.querySelectorAll('.home-cards .card').forEach((c, i) => {
+    c.addEventListener('click', (e) => {
+      if (c.getAttribute('href') === '#classical-mechanics' && c.getAttribute('data-id') === 'cm-001') {
+        e.preventDefault();
+        openDetail('cm-001');
+      }
+    });
+  });
+
+  // ---- Giscus theme after overlay toggle
+  window.getGiscusTheme = function () {
+    const theme = document.documentElement.getAttribute('data-theme') || 'light';
+    return theme === 'dark' ? 'dark' : 'light';
+  };
+});
+
 window.getGiscusTheme = function () {
   const theme = document.documentElement.getAttribute('data-theme') || 'light';
   return theme === 'dark' ? 'dark' : 'light';
