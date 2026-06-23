@@ -133,22 +133,23 @@
     max-width: 38em;
   }
 
-  /* Card */
-  .card, .section {
+  /* Section article cards — borderless tweet style */
+  .section .card {
     background: transparent;
     border: none;
     border-radius: 0;
-    padding: 14px 0;
+    padding: 12px 0;
     margin-bottom: 0;
-    transition: none;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
   }
-  [data-theme="dark"] .card,
-  [data-theme="dark"] .section {
-    border-bottom-color: rgba(255,255,255,0.07);
+  [data-theme="dark"] .section .card {
+    border-bottom-color: rgba(255,255,255,0.1);
   }
-  .card:active { transform: none; }
-  .card:hover { background: transparent; box-shadow: none; }
+  .section .card:last-child {
+    border-bottom: none;
+  }
+  .section .card:active { transform: none; }
+  .section .card:hover { background: transparent; box-shadow: none; }
 
   .card-link { text-decoration: none; color: inherit; display: block; }
 
