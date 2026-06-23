@@ -115,11 +115,11 @@
       <h1>欢迎来到我的私人物理宇宙</h1>
       <p class="lead">一个物理学、机器人与形而上学的混合实验场。这里没有学科边界——只有好奇心和公式。</p>
       <div class="cards">
-        <div class="card"><h3>📐 经典力学</h3><p>牛顿、拉格朗日、哈密顿，从质点到场论。</p></div>
-        <div class="card"><h3>🤖 机器人学</h3><p>ROS、运动规划、具身智能、从拆零件到控制律。</p></div>
-        <div class="card"><h3>☯️ 五行阴阳</h3><p>气、太极、易经，东方系统论的数学隐喻。</p></div>
-        <div class="card"><h3>✝️ 基督教神学</h3><p>信仰、逻辑、历史与存在的交汇。</p></div>
-        <div class="card"><h3>🎵 音乐 / 诗歌 / 其他</h3><p>律动、韵脚、以及一切未分类的有趣之物。</p></div>
+        <div class="card" onclick="scrollToSection('classical-mechanics')"><h3>📐 经典力学</h3><p>牛顿、拉格朗日、哈密顿，从质点到场论。</p></div>
+        <div class="card" onclick="scrollToSection('robotics')"><h3>🤖 机器人学</h3><p>ROS、运动规划、具身智能，以及从拆零件到控制律的一切。</p></div>
+        <div class="card" onclick="scrollToSection('yin-yang')"><h3>☯️ 五行阴阳</h3><p>气、太极、易经，东方系统论的数学隐喻。</p></div>
+        <div class="card" onclick="scrollToSection('theology')"><h3>✝️ 基督教神学</h3><p>信仰、逻辑、历史与存在的交汇。</p></div>
+        <div class="card" onclick="scrollToSection('others')"><h3>🎵 音乐 / 诗歌 / 其他</h3><p>律动、韵脚，以及一切未分类的有趣之物。</p></div>
       </div>
     </section>
 
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   nav.forEach(a => a.addEventListener('click', () => {
     activate(a.getAttribute('href').slice(1));
-    if (window.innerWidth <= 860) document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar').classList.remove('open');
   }));
   if (location.hash) activate(location.hash.slice(1));
 });
@@ -227,6 +227,14 @@ function filterNav(q) {
   document.querySelectorAll('#nav a[data-key]').forEach(a => {
     a.style.display = (!qq || (a.dataset.key || '').includes(qq)) ? '' : 'none';
   });
+}
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - 24;
+  window.scrollTo({ top, behavior: 'smooth' });
+  if (window.innerWidth <= 860) document.getElementById('sidebar').classList.remove('open');
 }
 </script>
 </body>
