@@ -55,12 +55,11 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html {
-    scroll-behavior: smooth;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
     background: var(--bg);
     color: var(--fg);
-    font-size: 18px;
-    line-height: 1.7;
+    font-size: 17px;
+    line-height: 1.45;
   }
 
   body {
@@ -155,20 +154,34 @@
 
   .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
   .card-icon {
-    width: 36px; height: 36px;
+    width: 40px; height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    background: #1D9BF0;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
     flex-shrink: 0;
+    color: #fff;
+  }
+  .card-icon-article {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--bg3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  [data-theme="dark"] .card-icon-article {
+    background: #1a1d20;
   }
   .card-title {
     font-size: 19px;
     font-weight: 800;
     line-height: 1.15;
-    color: var(--accent);
+    color: #1d9bf0;
   }
   .card-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
 
@@ -428,7 +441,7 @@
       <!-- 首页分类卡片 -->
       <a class="card card-link" href="#classical-mechanics">
         <div class="card-header">
-          <div class="card-icon" style="background:linear-gradient(135deg,#22d3ee,#1d9bf0);">▶</div>
+          <div class="card-icon">▶</div>
           <div>
             <div class="card-title" style="color:#1d9bf0;">经典力学</div>
             <div class="card-meta">5 篇</div>
@@ -441,7 +454,7 @@
 
       <a class="card card-link" href="#robotics">
         <div class="card-header">
-          <div class="card-icon" style="background:linear-gradient(135deg,#94a3b8,#475569);">🤖</div>
+          <div class="card-icon">🤖</div>
           <div>
             <div class="card-title" style="color:#1d9bf0;">机器人学</div>
             <div class="card-meta">8 篇</div>
@@ -454,7 +467,7 @@
 
       <a class="card card-link" href="#yin-yang">
         <div class="card-header">
-          <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed);">☯️</div>
+          <div class="card-icon">☯️</div>
           <div>
             <div class="card-title" style="color:#1d9bf0;">五行阴阳</div>
             <div class="card-meta">3 篇</div>
@@ -467,7 +480,7 @@
 
       <a class="card card-link" href="#theology">
         <div class="card-header">
-          <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed);">✝️</div>
+          <div class="card-icon">✝️</div>
           <div>
             <div class="card-title" style="color:#1d9bf0;">基督教神学</div>
             <div class="card-meta">4 篇</div>
@@ -480,7 +493,7 @@
 
       <a class="card card-link" href="#others">
         <div class="card-header">
-          <div class="card-icon" style="background:linear-gradient(135deg,#94a3b8,#475569);">♪</div>
+          <div class="card-icon">♪</div>
           <div>
             <div class="card-title" style="color:#1d9bf0;">音乐 / 诗歌 / 其他</div>
             <div class="card-meta">6 篇</div>
