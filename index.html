@@ -2,430 +2,206 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <title>Zion 的私人物理宇宙</title>
+
+<script>
+/* ===== 主题锁定：默认浅色，手动切换，不改深色默认 ===== */
+(function(){
+  try {
+    var saved = localStorage.getItem('physics-theme');
+    if (!saved || saved === 'light') saved = 'light';
+    if (saved === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    else if (saved === 'light') document.documentElement.removeAttribute('data-theme');
+  } catch (_){}
+})();
+</script>
+
+<!-- KaTeX CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<!-- KaTeX JS (渲染公式) -->
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
 <style>
-  :root {
-    --bg: #ffffff;
-    --bg2: #f7f9f9;
-    --bg3: #eff3f4;
-    --fg: #000000;
-    --muted: #536471;
-    --accent: #1d9bf0;
-    --accent2: #7c3aed;
-    --border: #eff3f4;
-    --card-bg: #ffffff;
-    --card-border: #eff3f4;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08);
-    --radius: 18px;
-    --code-bg: #f5f5f5;
-    --code-text: #7c3aed;
-    --overlay-bg: rgba(0,0,0,0.35);
-    --nav-bg: rgba(255,255,255,0.96);
-    --nav-border: #eff3f4;
-    --like: #f91880;
-    --topbar-bg: #ffffff;
-    --input-bg: #f7f9f9;
+  :root{
+    --bg:#ffffff;--bg2:#f7f9f9;--bg3:#eff3f4;
+    --fg:#000000;--muted:#536471;
+    --accent:#1d9bf0;--border:#eff3f4;
+    --card-border:#c9d3d6;
+    --card-bg:#ffffff;--topbar-bg:rgba(255,255,255,0.94);
+    --nav-bg:#ffffff;--nav-border:#eff3f4;
+    --input-bg:#eff3f4;--overlay:rgba(255,255,255,0.55);
+    --radius:14px;  --radius-sm:20px;
+    --like:#f91880;
+  }
+  [data-theme="dark"]{
+    --bg:#0f172a;--bg2:#1e293b;--bg3:#334155;
+    --fg:#f1f5f9;--muted:#94a3b8;
+    --accent:#38bdf8;--border:#334155;
+    --card-border:#2dc08d;--card-bg:#1e293b;
+    --topbar-bg:rgba(15,23,42,0.96);
+    --nav-bg:#1e293b;--nav-border:#334155;
+    --input-bg:#334155;--overlay:rgba(15,23,42,0.55);
   }
 
-  [data-theme="dark"] {
-    --bg: #0b0b15;
-    --bg2: #131221;
-    --bg3: #1c1b2e;
-    --fg: #d8d4e4;
-    --muted: #9b97aa;
-    --accent: #7c8cff;
-    --accent2: #a78bfa;
-    --border: #2e2b3d;
-    --card-bg: #131221;
-    --card-border: #2e2b3d;
-    --shadow: 0 4px 24px rgba(0,0,0,0.38);
-    --code-bg: #0e0d17;
-    --code-text: #b8a9ff;
-    --overlay-bg: rgba(0,0,0,0.55);
-    --nav-bg: rgba(11,11,21,0.96);
-    --nav-border: #2e2b3d;
-    --topbar-bg: #0b0b15;
-    --input-bg: #1c1b2e;
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans SC",sans-serif;
+    background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;
+    font-size:17px;line-height:1.6;
+    padding-top:66px; padding-bottom: env(safe-area-inset-bottom,0px);
   }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Noto Sans SC", sans-serif;
-    background: var(--bg);
-    color: var(--fg);
-    font-size: 17px;
-    line-height: 1.45;
-  }
-
-  body {
-    min-height: 100vh;
-    overflow-x: hidden;
-    background: var(--bg);
-  }
-
-  .app { max-width: 720px; margin: 0 auto; position: relative; }
 
   /* Top bar */
-  .topbar {
-    position: fixed;
-    top: 0;
-    left: 0; right: 0;
-    z-index: 30;
-    background: var(--topbar-bg);
-    border-bottom: 1px solid var(--nav-border);
-    padding: 0 18px;
-    height: 54px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:30;height:54px;
+    background:var(--topbar-bg);
+    backdrop-filter: saturate(180%) blur(18px);-webkit-backdrop-filter: saturate(180%) blur(18px);
+    border-bottom:1px solid var(--nav-border);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 14px; gap:10px;
   }
-  .topbar-left, .topbar-right { display: flex; align-items: center; gap: 10px; }
-  .topbar-label {
-    font-size: 14px;
-    color: var(--muted);
-    letter-spacing: 0.2px;
+  .topbar-left,.topbar-right{display:flex;align-items:center;gap:8px;}
+  .btn{
+    -webkit-tap-highlight-color:transparent; user-select:none;
+    border:0;background:transparent;color:inherit;cursor:pointer;
+    font-size:15px;padding:8px 10px;border-radius:10px;
   }
-
-  .btn {
-    background: transparent;
-    border: none;
-    color: var(--fg);
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: inherit;
-    transition: background 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .btn:hover { background: rgba(255,255,255,0.08); }
-  .btn-ghost { border: 1px solid var(--border); }
+  .btn-ghost{background:transparent;color:var(--fg);}
+  .topbar-title{font-weight:800;font-size:15px;color:var(--fg);}
 
   /* Feed */
-  .feed { padding: 62px 16px 80px; }
+  .feed{ padding:62px 16px 80px; max-width:620px; margin:0 auto; }
 
   /* Hero */
-  .hero {
-    padding: 30px 4px 16px;
-    margin-bottom: 6px;
+  .hero{ padding:24px 4px 18px; margin-bottom:6px; }
+  .hero h1{
+    font-size:clamp(34px,7vw,52px);font-weight:800;letter-spacing:-1px;line-height:1.06;
+    color:var(--fg);
   }
-  .hero h1 {
-    font-size: clamp(36px, 7vw, 56px);
-    font-weight: 800;
-    letter-spacing: -1px;
-    line-height: 1.05;
-    color: var(--fg);
-  }
-  .hero p {
-    font-size: 18px;
-    color: var(--muted);
-    margin-top: 12px;
-    line-height: 1.55;
-    max-width: 38em;
-  }
+  .hero p{font-size:17px;color:var(--muted);margin-top:12px;line-height:1.6;max-width:38em;}
 
-  .card-link { text-decoration: none; color: inherit; display: block; }
-  .home-cards { display: flex; flex-direction: column; gap: 14px; padding: 6px 0; }
-
-  /* Home category cards — visual blocks */
-  .home-cards .card {
-    background: var(--bg2);
-    border: 1px solid var(--card-border);
-    border-radius: var(--radius);
-    padding: 14px 16px;
+  /* Home cards */
+  .home-cards{display:flex;flex-direction:column;gap:14px;padding:8px 0 16px;}
+  .card{text-decoration:none;color:inherit;display:block;}
+  .home-cards .card{
+    background:var(--bg2);border:1px solid var(--card-border);border-radius:var(--radius);
+    padding:14px 16px;
+    transition:background .15s;
   }
-  .home-cards .card:hover { background: var(--bg3); }
+  .home-cards .card:hover{background:var(--bg3);}
 
   /* Feed article cards — fully borderless */
-  .section .card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    padding: 12px 0;
-  }
-  .section .card:hover { background: transparent; box-shadow: none; }
-  .section .card:active { transform: none; }
+  .section .card{background:transparent;border:none;border-radius:0;padding:16px 0;}
+  .section .card:hover{background:transparent;box-shadow:none;transform:none;}
+  .section .card:active{transform:none;}
 
-  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .card-icon {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: #1D9BF0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-    color: #fff;
+  .card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .card-icon{
+    width:36px;height:36px;border-radius:50%;background:#1D9BF0;
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+    flex-shrink:0;color:#fff;
   }
-  .card-icon-article {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: var(--bg3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    flex-shrink: 0;
+  .card-icon-article{
+    width:34px;height:34px;border-radius:50%;background:var(--bg3);
+    display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
   }
-  [data-theme="dark"] .card-icon-article {
-    background: #1a1d20;
+  [data-theme="dark"] .card-icon-article{background:#1a1d20;}
+  .card-title{
+    font-size:18px;font-weight:800;line-height:1.15;color:var(--fg);
   }
-  .card-title {
-    font-size: 19px;
-    font-weight: 800;
-    line-height: 1.15;
-    color: var(--fg);
+  .card-meta{font-size:13px;color:var(--muted);margin-top:4px;}
+  .card-body{font-size:17px;color:var(--fg);line-height:1.7;margin-top:10px;}
+  .card-equation{margin:8px 0;}
+  .card-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .chip{
+    font-size:13px;padding:6px 10px;border-radius:999px;
+    border:1px solid var(--border);background:var(--bg);
   }
-  .card-meta { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .card-footer{
+    display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:12px;
+  }
+  .card-footer-left{display:flex;gap:18px;}
+  .card-footer-item{
+    display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+    user-select:none;transition:transform .12s;color:var(--muted);font-size:14px;
+  }
+  .card-footer-item:active{transform:scale(1.2);}
+  .card-footer-item.liked{color:var(--like);font-weight:800;}
+  .heart{transition:transform .2s;}
+  .heart.pop{animation:heartPop .38s ease;}
+  @keyframes heartPop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
 
-  .card-body, .section-body {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--muted);
+  /* Section */
+  .section{padding:22px 4px 8px;}
+  .section-title{
+    font-size:13px;font-weight:700;letter-spacing:.6px;
+    text-transform:uppercase;color:var(--muted);
+    text-decoration:none;display:inline-block;margin-bottom:8px;
   }
-  .card-body p, .section-body p { margin: 0 0 12px; }
-  .card-body strong, .section-body strong { font-weight: 700; }
+  /* Sidebar */
+  .overlay{
+    position:fixed;inset:0;z-index:40;background:rgba(15,23,42,0.35);
+    opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s;
+  }
+  .overlay.show{opacity:1;visibility:visible;}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:min(88vw,300px);z-index:50;
+    background:var(--nav-bg);border-right:1px solid var(--nav-border);
+    transform:translateX(-100%);transition:transform .18s;
+    padding:14px 10px 16px;display:flex;flex-direction:column;
+  }
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-brand{font-weight:800;font-size:15px;color:var(--fg);padding:8px 6px 10px;}
+  .search{
+    width:100%;margin:6px 0 8px;padding:11px 12px;border-radius:10px;
+    border:1px solid var(--border);background:var(--input-bg);color:var(--fg);
+    outline:none;font-size:16px;
+  }
+  .nav-label{font-size:12px;color:var(--muted);padding:6px 6px;}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;
+    text-decoration:none;color:var(--fg);font-weight:600;font-size:15px;
+  }
+  .nav-item.active{background:var(--bg3);}
+  .sidebar-spacer{flex:1 1 auto;}
+  .sidebar-bottom{padding-top:10px;border-top:1px solid var(--border);}
 
-  .card-code {
-    margin: 14px 0;
-    padding: 16px;
-    background: var(--code-bg);
-    border-radius: var(--radius);
-    overflow-x: auto;
-    font-size: 15px;
-    line-height: 1.7;
-    border: 1px solid var(--card-border);
+  /* Detail */
+  .detail-overlay{
+    position:fixed;inset:0;z-index:60;background:rgba(15,23,42,0.5);
+    display:flex;justify-content:flex-end;opacity:0;visibility:hidden;transition:opacity .18s,visibility .18s;
   }
-  .card-code code { background: none; border: none; padding: 0; color: var(--fg);
-    font-family: "SF Mono", "Fira Code", Consolas, monospace; }
+  .detail-overlay.show{opacity:1;visibility:visible;}
+  .detail-panel{
+    width:min(100%,780px);height:100vh;background:var(--bg);overflow-y:auto;
+    padding:14px 14px 40px;
+  }
+  .detail-header{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:16px;gap:10px;position:sticky;top:0;
+    background:var(--bg);padding:8px 0;z-index:1;
+  }
+  .detail-title{font-size:26px;font-weight:800;color:var(--fg);margin:8px 0 6px;line-height:1.15;}
+  .detail-meta{font-size:14px;color:var(--muted);margin-bottom:14px;}
+  .detail-body{font-size:17px;color:var(--fg);line-height:1.75;}
+  .detail-body p{margin:0 0 14px;}
 
-  .card-equation {
-    margin: 14px 0;
-    padding: 18px;
-    text-align: center;
-    background: rgba(255,255,255,0.03);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    font-size: 15px;
-    overflow-x: auto;
+  ::-webkit-scrollbar{width:5px;height:5px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:3px;}
+  a{-webkit-tap-highlight-color:transparent;}
+  .desktop-only{display:none;}
+  @media(min-width:900px){
+    .desktop-only{display:inline-flex;gap:8px;align-items:center;}
+    .mobile-only{display:none;}
   }
-
-  .card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-  .tag {
-    font-size: 13px;
-    padding: 6px 14px;
-    border-radius: 22px;
-    background: var(--bg3);
-    color: var(--muted);
-    border: 1px solid var(--border);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s;
-    user-select: none;
+  @media(max-width:899px){
+    .desktop-only{display:none!important;}
+    .mobile-only{display:inline-flex;}
   }
-  .tag:hover { border-color: var(--accent); color: var(--accent); background: var(--bg2); }
-
-  .card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .card-footer-left { display: flex; gap: 22px; }
-  .card-footer-item {
-    display: inline-flex; align-items: center; gap: 6px;
-    cursor: pointer; user-select: none; transition: transform 0.15s;
-  }
-  .card-footer-item:active { transform: scale(1.2); }
-  .card-footer-item.liked { color: var(--like); font-weight: 800; }
-  .heart { animation: heartPop 0.38s ease; }
-  @keyframes heartPop {
-    0% { transform: scale(1); }
-    45% { transform: scale(1.4); }
-    100% { transform: scale(1); }
-  }
-
-  /* Sections */
-  .section { margin-top: 10px; }
-  .section-title {
-    font-size: 13px;
-    font-weight: 700;
-    padding: 6px 6px 6px;
-    color: var(--muted);
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-  }
-  .section-body {
-    font-size: 16px;
-    line-height: 1.75;
-    color: var(--muted);
-  }
-  .section-body p { margin: 0 0 12px; }
-
-  /* Overlay */
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: var(--overlay-bg);
-    z-index: 40;
-  }
-  .overlay.show { display: block; }
-
-  /* Desktop sidebar */
-  @media (min-width: 881px) {
-    .app {
-      display: grid;
-      grid-template-columns: 260px 1fr;
-    }
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      background: transparent;
-      border-right: 0;
-      backdrop-filter: none;
-      z-index: 1;
-      transform: none;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-    }
-    .overlay { display: none !important; }
-    .topbar { padding: 0 14px; }
-    .mobile-only { display: none !important; }
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    width: 280px;
-    max-width: 82vw;
-    background: var(--nav-bg);
-    border-right: 1px solid var(--nav-border);
-    z-index: 50;
-    transform: translateX(-100%);
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    padding: 20px;
-  }
-  @media (max-width: 880px) {
-    .desktop-only { display: none !important; }
-    html { font-size: 17px; }
-  }
-  .sidebar.open { transform: translateX(0); }
-
-  .sidebar-brand {
-    font-size: 17px;
-    font-weight: 800;
-    margin-bottom: 18px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--border);
-    color: var(--fg);
-  }
-  .sidebar-brand small {
-    display: block;
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 700;
-    margin-top: 4px;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-  }
-
-  .search {
-    width: 100%;
-    padding: 12px 14px;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    color: var(--fg);
-    font-size: 15px;
-    outline: none;
-    margin-bottom: 14px;
-  }
-  .search:focus { border-color: var(--accent); }
-
-  .nav-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.4px;
-    color: var(--muted);
-    margin: 12px 10px 6px;
-    font-weight: 800;
-    opacity: 0.75;
-  }
-  .nav-item {
-    display: block;
-    padding: 11px 14px;
-    border-radius: 14px;
-    color: var(--fg);
-    font-size: 15px;
-    font-weight: 600;
-    margin: 2px 0;
-    text-decoration: none;
-    transition: background 0.15s;
-  }
-  .nav-item:hover { background: var(--bg3); }
-  .nav-item.active { background: var(--bg3); color: var(--accent); font-weight: 800; }
-
-  .sidebar-spacer { flex: 1 1 auto; }
-  .sidebar-bottom { padding-top: 12px; border-top: 1px solid var(--border); }
-
-  /* Detail overlay */
-  .detail-overlay {
-    position: fixed; inset: 0; z-index: 60;
-    background: rgba(0, 0, 0, 0.55);
-    display: flex; justify-content: flex-end;
-    opacity: 0; visibility: hidden;
-    transition: opacity 0.2s, visibility 0.2s;
-  }
-  .detail-overlay.show { opacity: 1; visibility: visible; }
-  .detail-panel {
-    width: min(100%, 860px); height: 100vh;
-    background: var(--bg);
-    overflow-y: auto;
-    padding: 18px 18px 40px;
-  }
-  .detail-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 18px; gap: 10px;
-  }
-  .detail-title {
-    font-size: 28px; font-weight: 800;
-    color: var(--fg); margin: 6px 0;
-  }
-  .detail-meta {
-    font-size: 14px; color: var(--muted); margin-bottom: 18px;
-  }
-  .detail-body {
-    font-size: 17px; color: var(--fg);
-    line-height: 1.75;
-  }
-  .detail-body p { margin: 0 0 14px; }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -433,10 +209,7 @@
   <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar-brand">
-      Zion 的私人物理宇宙
-      <small>Physics · Robotics · 阴阳 · Theology · Others</small>
-    </div>
+    <div class="sidebar-brand">Zion · 物理宇宙</div>
     <input class="search" id="search" placeholder="搜索文章..." oninput="filterNav(this.value)">
     <div class="nav-label">导航</div>
     <a href="#home" class="nav-item active" data-key="首页">🏠 首页</a>
@@ -460,87 +233,88 @@
   <main>
     <header class="topbar">
       <div class="topbar-left">
-        <button class="btn mobile-only" onclick="openDetailSidebar()" style="padding:10px 10px;">☰</button>
+        <button class="btn mobile-only" onclick="openSidebar()" style="padding:8px 10px;">☰ 三 导航</button>
         <span class="topbar-label desktop-only">三 导航</span>
       </div>
       <div class="topbar-right">
-        <span class="topbar-label desktop-only">静态站点 · 暗色极客风 · KaTeX</span>
-        <button class="btn btn-ghost mobile-only" onclick="toggleTheme()" id="themeMobile" style="padding:10px 12px;">🌙</button>
+        <span class="topbar-label desktop-only">静态站点 · Web 信息流 · KaTeX</span>
+        <button class="btn btn-ghost mobile-only" onclick="toggleTheme()" id="themeMobile" style="padding:8px 10px;">
+          <span id="themeIconMobile">🌙</span>
+        </button>
       </div>
     </header>
 
     <div class="feed">
       <section id="home" class="hero">
-        <h1>欢迎来到我的私人物理宇宙</h1>
+        <h1>欢迎来到Zion 的私人物理宇宙</h1>
         <p>一个物理学、机器人与形而上学的混合实验场。这里没有学科边界——只有好奇心和公式。</p>
       </section>
 
-      <!-- 首页分类卡片 -->
       <div class="home-cards">
-      <a class="card card-link" href="#classical-mechanics" data-id="cm-001">
-        <div class="card-header">
-          <div class="card-icon">▶</div>
-          <div>
-            <div class="card-title">经典力学</div>
-            <div class="card-meta">5 篇</div>
+        <a class="card" href="#classical-mechanics" data-id="cm-001">
+          <div class="card-header">
+            <div class="card-icon">▶</div>
+            <div>
+              <div class="card-title">经典力学</div>
+              <div class="card-meta">5 篇</div>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <p>牛顿、拉格朗日、哈密顿，从质点到场论。</p>
-        </div>
-      </a>
+          <div class="card-body">
+            <p>牛顿、拉格朗日、哈密顿，从质点到场论。</p>
+          </div>
+        </a>
 
-      <a class="card card-link" href="#robotics">
-        <div class="card-header">
-          <div class="card-icon">🤖</div>
-          <div>
-            <div class="card-title">机器人学</div>
-            <div class="card-meta">8 篇</div>
+        <a class="card" href="#robotics">
+          <div class="card-header">
+            <div class="card-icon">🤖</div>
+            <div>
+              <div class="card-title">机器人学</div>
+              <div class="card-meta">8 篇</div>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <p>ROS、运动规划、具身智能，从拆零件到控制律。</p>
-        </div>
-      </a>
+          <div class="card-body">
+            <p>ROS、运动规划、具身智能，从拆零件到控制律。</p>
+          </div>
+        </a>
 
-      <a class="card card-link" href="#yin-yang">
-        <div class="card-header">
-          <div class="card-icon">☯️</div>
-          <div>
-            <div class="card-title">五行阴阳</div>
-            <div class="card-meta">3 篇</div>
+        <a class="card" href="#yin-yang">
+          <div class="card-header">
+            <div class="card-icon">⚗️</div>
+            <div>
+              <div class="card-title">五行阴阳</div>
+              <div class="card-meta">3 篇</div>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <p>气、太极、易经，东方系统的数学隐喻。</p>
-        </div>
-      </a>
+          <div class="card-body">
+            <p>气、太极、易经，东方系统的数学隐喻。</p>
+          </div>
+        </a>
 
-      <a class="card card-link" href="#theology">
-        <div class="card-header">
-          <div class="card-icon">✝️</div>
-          <div>
-            <div class="card-title">基督教神学</div>
-            <div class="card-meta">4 篇</div>
+        <a class="card" href="#theology">
+          <div class="card-header">
+            <div class="card-icon">✝️</div>
+            <div>
+              <div class="card-title">基督教神学</div>
+              <div class="card-meta">4 篇</div>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <p>信仰、逻辑、历史与存在的交汇。</p>
-        </div>
-      </a>
+          <div class="card-body">
+            <p>信仰、逻辑、历史与存在的交汇。</p>
+          </div>
+        </a>
 
-      <a class="card card-link" href="#others">
-        <div class="card-header">
-          <div class="card-icon">♪</div>
-          <div>
-            <div class="card-title">音乐 / 诗歌 / 其他</div>
-            <div class="card-meta">6 篇</div>
+        <a class="card" href="#others">
+          <div class="card-header">
+            <div class="card-icon">♪</div>
+            <div>
+              <div class="card-title">音乐 / 诗歌 / 其他</div>
+              <div class="card-meta">6 篇</div>
+            </div>
           </div>
-        </div>
-        <div class="card-body">
-          <p>律动、韵脚，以及一切未分类的有趣之物。</p>
-        </div>
-      </a>
+          <div class="card-body">
+            <p>律动、韵脚，以及一切未分类的有趣之物。</p>
+          </div>
+        </a>
       </div>
 
       <!-- 详情弹层 -->
@@ -550,19 +324,21 @@
             <button class="btn btn-ghost" onclick="closeDetail()">← 返回</button>
             <button class="btn btn-ghost" onclick="shareArticle()">🔗 转发</button>
           </div>
+          <div class="detail-title" id="detailTitle"></div>
+          <div class="detail-meta" id="detailMeta"></div>
           <div class="detail-body" id="detailBody"></div>
-          <div id="giscus-mount"></div>
+          <div style="margin-top:18px;border-top:1px solid var(--border);padding-top:14px;"></div>
+          <div id="giscus-mount" style="min-height:260px;"></div>
         </div>
       </div>
 
-
-      <!-- 可继续刷的内容区 -->
+      <!-- 文章区（示例） -->
       <div class="section" id="classical-mechanics">
         <a class="section-title" href="#classical-mechanics" style="text-decoration:none;">🟦 经典力学</a>
         <div class="section-body">
           <article class="card">
             <div class="card-header">
-              <div class="card-icon" style="background:linear-gradient(135deg,#22d3ee,#1d9bf0);width:40px;height:40px;font-size:20px;">📖</div>
+              <div class="card-icon-article">📖</div>
               <div>
                 <div class="card-title">从牛顿第二定律到场论</div>
                 <div class="card-meta">经典力学 · 阅读 3 分钟</div>
@@ -570,478 +346,176 @@
             </div>
             <div class="card-body">
               <p>这篇将从最朴素的 $F=ma$ 出发，一步步过渡到拉格朗日量与欧拉-拉格朗日方程。</p>
-              <div class="card-equation" data-expr="S = \int_{t_1}^{t_2} L(q,\dot{q},t)\,dt"></div>
+              <div class="card-equation" data-expr="S=\int_{t_1}^{t_2} L(q,\dot{q},t)\,dt"></div>
               <p>原理：系统的实际运动路径，使得作用量取驻值。</p>
-              <p><strong>继续阅读：</strong>单摆、双摆、刚体、到场论的构造方法。</p>
-            </div>
-            <div class="card-tags">
-              <span class="tag" onclick="scrollToSection('mechanics-newton')">牛顿</span>
-              <span class="tag" onclick="scrollToSection('mechanics-lagrange')">拉格朗日</span>
-              <span class="tag" onclick="scrollToSection('mechanics-hamilton')">哈密顿</span>
+              <p>继续阅读：单摆、双摆、刚体、到场论的构造方法。</p>
+              <div class="card-tags">
+                <span class="chip">牛顿</span><span class="chip">拉格朗日</span><span class="chip">哈密顿</span>
+              </div>
             </div>
             <div class="card-footer">
               <div class="card-footer-left">
-                <span class="card-footer-item" onclick="toggleLike(this)">
-                  <span class="heart">♡</span> <span class="count">18</span>
+                <span class="card-footer-item" onclick="window.toggleLike&&window.toggleLike(this)">
+                  <span class="heart">♡</span><span class="count">18</span>
                 </span>
-                <span class="card-footer-item">💬 4</span>
-              </div>
-              <span>昨天</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:linear-gradient(135deg,#22d3ee,#1d9bf0);width:40px;height:40px;font-size:20px;">📝</div>
-              <div>
-                <div class="card-title">习题：弹簧振子</div>
-                <div class="card-meta">习题 · 预计 15 分钟</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p>求质量 $m$、弹簧劲度系数 $k$ 的一维振子，写出拉格朗日量并导出周期。</p>
-              <div class="card-equation" data-expr="T = \frac{1}{2}m\dot{x}^2,\quad V = \frac{1}{2}kx^2,\quad T=2\pi\sqrt{\frac{m}{k}}"></div>
-            </div>
-            <div class="card-footer">
-              <div class="card-footer-left">
-                <span class="card-footer-item" onclick="toggleLike(this)">
-                  <span class="heart">♡</span> <span class="count">9</span>
-                </span>
-                <span class="card-footer-item">💬 2</span>
-              </div>
-              <span>2 天前</span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div class="section" id="robotics">
-        <a class="section-title" href="#robotics" style="text-decoration:none;">🟦 机器人学</a>
-        <div class="section-body">
-          <article class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:linear-gradient(135deg,#94a3b8,#475569);width:40px;height:40px;font-size:20px;">⚙️</div>
-              <div>
-                <div class="card-title">两轮差速运动学</div>
-                <div class="card-meta">机器人学 · 阅读 4 分钟</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p>左右轮速度 $v_r, v_l$，轴距 $L$，推导底盘运动方程并实现位置更新。</p>
-              <div class="card-equation" data-expr="v = \frac{v_r+v_l}{2},\quad \omega=\frac{v_r-v_l}{L}"></div>
-              <div class="card-equation" data-expr="\dot{x}=v\cos\theta,\quad \dot{y}=v\sin\theta,\quad \dot{\theta}=\omega"></div>
-              <div class="card-code"><code>def step(x, y, θ, vr, vl, L, dt):
-    v = (vr + vl) / 2.0
-    w = (vr - vl) / L
-    x += v*cos(θ)*dt
-    y += v*sin(θ)*dt
-    θ += w*dt
-    return x, y, θ</code></div>
-            </div>
-            <div class="card-tags">
-              <span class="tag">ROS</span>
-              <span class="tag">运动学</span>
-              <span class="tag">控制</span>
-            </div>
-            <div class="card-footer">
-              <div class="card-footer-left">
-                <span class="card-footer-item" onclick="toggleLike(this)">
-                  <span class="heart">♡</span> <span class="count">24</span>
-                </span>
-                <span class="card-footer-item">💬 7</span>
-              </div>
-              <span>今天</span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div class="section" id="yin-yang">
-        <div class="section-title">⚗️ 五行阴阳</div>
-        <div class="section-body">
-          <article class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed);width:40px;height:40px;font-size:20px;">🔮</div>
-              <div>
-                <div class="card-title">木火土金水：作为系统元素</div>
-                <div class="card-meta">系统论 · 阅读 6 分钟</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p><strong>木</strong>：生发、伸展、青色<br>
-                 <strong>火</strong>：炎热、上升、红色<br>
-                 <strong>土</strong>：承载、孕育、黄色<br>
-                 <strong>金</strong>：收敛、肃杀、白色<br>
-                 <strong>水</strong>：润下、寒凉、黑色</p>
-              <p>五行可以抽象成图结构：节点集合 $V=\{木,火,土,金,水\}$，边集按相生关系连接。</p>
-            </div>
-            <div class="card-tags">
-              <span class="tag">🟢 木</span>
-              <span class="tag">🔴 火</span>
-              <span class="tag">🟡 土</span>
-              <span class="tag">⚪ 金</span>
-              <span class="tag">🔵 水</span>
-            </div>
-            <div class="card-footer">
-              <div class="card-footer-left">
-                <span class="card-footer-item" onclick="toggleLike(this)">
-                  <span class="heart">♡</span> <span class="count">11</span>
-                </span>
-                <span class="card-footer-item">💬 3</span>
+                <span class="card-footer-item" onclick="window.openDetail&&window.openDetail('cm-001')">💬 <span class="count">4</span></span>
               </div>
               <span>昨天</span>
             </div>
           </article>
         </div>
-      </div>
-
-      <div class="section" id="theology">
-        <div class="section-title">✝️ 基督教神学</div>
-        <div class="section-body">
-          <article class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:linear-gradient(135deg,#a855f7,#7c3aed);width:40px;height:40px;font-size:20px;">📖</div>
-              <div>
-                <div class="card-title">三位一体与系统结构</div>
-                <div class="card-meta">系统神学 · 阅读 7 分钟</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p>一个上帝，三个位格：圣父、圣子、圣灵。传统表述为 <em>one ousia, three hypostases</em>。这是一个结构问题，而非简单的 1+1+1。</p>
-            </div>
-            <div class="card-footer">
-              <div class="card-footer-left">
-                <span class="card-footer-item" onclick="toggleLike(this)">
-                  <span class="heart">♡</span> <span class="count">15</span>
-                </span>
-                <span class="card-footer-item">💬 5</span>
-              </div>
-              <span>3 天前</span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div class="section" id="others">
-        <div class="section-title">🎨 其他</div>
-        <div class="section-body">
-          <article class="card">
-            <div class="card-header">
-              <div class="card-icon" style="background:linear-gradient(135deg,#94a3b8,#475569);width:40px;height:40px;font-size:20px;">🎵</div>
-              <div>
-                <div class="card-title">用代码生成音乐的想法</div>
-                <div class="card-meta">音乐 / 创意编程</div>
-              </div>
-            </div>
-            <div class="card-body">
-              <p>和声规则、节奏纹理、随机过程与生成旋律。</p>
-            </div>
-            <div class="card-footer">
-              <div class="card-footer-left">
-                <span class="card-footer-item" onclick="toggleLike(this)">
-                  <span class="heart">♡</span> <span class="count">7</span>
-                </span>
-                <span class="card-footer-item">💬 1</span>
-              </div>
-              <span>1 周前</span>
-            </div>
-          </article>
-        </div>
-      </div>
-
-      <div style="text-align:center;padding:28px;color:var(--muted);font-size:15px;font-weight:600;">
-        — 已到底部，更多内容持续更新中 —
       </div>
     </div>
   </main>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "$", right: "$", display: false},
-      {left: "\\(", right: "\\)", display: false}
-    ],
-    throwOnError: false
-  });
-
-  const saved = localStorage.getItem('theme');
-  // Default light unless user previously chose dark
-  const theme = saved || 'light';
-  document.documentElement.setAttribute('data-theme', theme);
-  updateThemeBtn();
-});
-
-function updateThemeBtn() {
-  const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  const isDark = theme === 'dark';
-  document.getElementById('themeMobile').textContent = isDark ? '☀️' : '🌙';
-  const icon = document.getElementById('themeIconDesktop');
-  if (icon) icon.textContent = isDark ? '☀️' : '🌙';
-}
-
-function toggleTheme() {
-  const current = document.documentElement.getAttribute('data-theme') || 'light';
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('theme', next);
-  updateThemeBtn();
-}
-function filterNav(q) {
-  const qq = q.toLowerCase();
-  document.querySelectorAll('#sidebar a[data-key]').forEach(a => {
-    a.style.display = (!qq || (a.dataset.key || '').includes(qq)) ? '' : 'none';
-  });
-}
-function openSidebar() {
-  document.getElementById('sidebar').classList.add('open');
-  document.getElementById('overlay').classList.add('show');
-}
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('overlay').classList.remove('show');
-}
-function scrollToSection(id) {
-  if (!id) return;
-  const el = document.getElementById(id);
-  if (!el) return;
-  const y = el.getBoundingClientRect().top + window.pageYOffset - 62;
-  window.scrollTo({ top: y, behavior: 'smooth' });
-}
-function toggleLike(item) {
-  const count = item.querySelector('.count');
-  const heart = item.querySelector('.heart');
-  if (!count || !heart) return;
-  const liked = item.classList.toggle('liked');
-  let n = parseInt(count.textContent, 10) || 0;
-  count.textContent = liked ? n + 1 : Math.max(0, n - 1);
-  heart.textContent = liked ? '♥' : '♡';
-}
-
-/* ===== 文章详情弹层 ===== */
-const ARTICLE_MAP = {
-  'cm-001': {
-    title: '从牛顿第二定律到场论',
-    meta: '经典力学 · 阅读 3 分钟',
-    body: '<p>这篇将从最朴素的 $F=ma$ 出发，一步步过渡到拉格朗日量与欧拉\u2013拉格朗日方程。</p>'
-        + '<div class="card-equation" data-expr="S=\\int_{t_1}^{t_2} L(q,\\dot{q},t)\\,dt"><\/div>'
-        + '<p>原理：系统的实际运动路径，使得作用量取驻值。</p>'
-        + '<p>继续阅读：单摆、双摆、刚体、到场论的构造方法。</p>'
-  }
-};
-
-function openDetail(id) {
-  const article = ARTICLE_MAP[id];
-  if (!article) return;
-  document.getElementById('detailTitle').textContent = article.title;
-  document.getElementById('detailMeta').textContent = article.meta;
-  document.getElementById('detailBody').innerHTML = article.body;
-  try { renderMathInElement(document.getElementById('detailBody'), {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]}); } catch (_) {}
-  document.getElementById('detailOverlay').classList.add('show');
-  if (window.__giscus_init) { window.__giscus_init(); }
-}
-function closeDetail() {
-  document.getElementById('detailOverlay').classList.remove('show');
-}
-
-/* 转发：优先原生分享，失败则复制链接 */
-async function shareArticle() {
-  const url = location.href;
-  const title = document.getElementById('detailTitle').textContent;
-  try {
-    if (navigator.share) {
-      await navigator.share({ title, url });
-    } else {
-      await navigator.clipboard.writeText(url);
-      alert('链接已复制，可分享给朋友。');
-    }
-  } catch (_) {
-    // 用户取消分享时静默
-  }
-}
-
-<script src="https://giscus.app/client.js"
-        data-repo="zion000yui/physics-site"
-        data-repo-id="R_kgDOTC-1Yw"
-        data-category="General"
-        data-category-id="DIC_kwDOTC-1Y84C_wxC"
-        data-mapping="pathname"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="zh-CN"
-        crossorigin="anonymous"
-        async>
-</script>
-<script>
-
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('detailTitle')) return;
-
-  // ---- Theme
-  const saved = localStorage.getItem('theme');
-  const theme = saved || 'light';
-  document.documentElement.setAttribute('data-theme', theme);
-  const themeLabelMap = { light: '🌙', dark: '☀️' };
+document.addEventListener('DOMContentLoaded', function () {
+  // Theme
+  var saved = localStorage.getItem('theme');
+  if (!saved) saved = 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  var themeLabelMap = { light: '🌙', dark: '☀️' };
   window.toggleTheme = function () {
-    const cur = document.documentElement.getAttribute('data-theme') || 'light';
-    const next = cur === 'dark' ? 'light' : 'dark';
+    var next = (document.documentElement.getAttribute('data-theme') || 'light') === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
-    ['themeIconDesktop','themeMobile'].forEach(id => {
-      const el = document.getElementById(id);
+    ['themeIconDesktop','themeMobile'].forEach(function (id) {
+      var el = document.getElementById(id);
       if (el) el.textContent = themeLabelMap[next] || '🌙';
     });
-    if (window.getGiscusTheme) {
-      setTimeout(() => window.getGiscusTheme && window.getGiscusTheme(), 60);
-    }
   };
-  ['themeIconDesktop','themeMobile'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = themeLabelMap[theme] || '🌙';
+  ['themeIconDesktop','themeMobile'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = themeLabelMap[saved] || '🌙';
   });
 
-  // ---- Sidebar
-  let nav = 0, lastQuery = '';
-  document.querySelectorAll('.nav-item').forEach(el => {
-    el.addEventListener('click', () => setTimeout(() => closeSidebar(), 0));
+  // Sidebar
+  var nav = 0, lastQuery = '';
+  document.querySelectorAll('.nav-item').forEach(function (el) {
+    el.addEventListener('click', function () { setTimeout(closeSidebar, 0); });
   });
-  window.openSidebar = window.openDetailSidebar = function () {
-    nav = 1; document.getElementById('overlay').classList.add('show');
+  window.openSidebar = function () {
+    nav = 1;
+    document.getElementById('overlay').classList.add('show');
     document.getElementById('sidebar').classList.add('open');
   };
   window.closeSidebar = function () {
-    nav = 0; document.getElementById('overlay').classList.remove('show');
+    nav = 0;
+    document.getElementById('overlay').classList.remove('show');
     document.getElementById('sidebar').classList.remove('open');
   };
 
-  // ---- Search
+  // Search
   window.filterNav = function (q) {
     lastQuery = (q || '').toLowerCase();
-    document.querySelectorAll('.nav-item').forEach(el => {
-      const txt = ((el.getAttribute('data-key') || '') + ' ' + (el.textContent || '')).toLowerCase();
-      el.style.display = (!lastQuery || txt.includes(lastQuery)) ? '' :
-        (el.style.cssText += ';display:none', 'none');
+    document.querySelectorAll('.nav-item').forEach(function (el) {
+      var txt = ((el.getAttribute('data-key') || '') + ' ' + (el.textContent || '')).toLowerCase();
+      el.style.display = (!lastQuery || txt.includes(lastQuery)) ? '' : 'none';
     });
   };
 
-  // ---- Scroll-to-section
+  // Scroll-to-section
   window.scrollToSection = function (id) {
     if (!id) return;
-    const el = document.getElementById(id);
+    var el = document.getElementById(id);
     if (!el) return;
-    const y = el.getBoundingClientRect().top + window.pageYOffset - 62;
+    var y = el.getBoundingClientRect().top + window.pageYOffset - 66;
     window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
-  // ---- Like
+  // Like
   window.toggleLike = function (item) {
-    const count = item.querySelector('.count');
-    const heart = item.querySelector('.heart');
+    var count = item.querySelector('.count');
+    var heart = item.querySelector('.heart');
     if (!count || !heart) return;
-    const liked = item.classList.contains('liked');
-    let n = parseInt(count.textContent, 10) || 0;
+    var liked = item.classList.contains('liked');
+    var n = parseInt(count.textContent, 10) || 0;
     if (!liked) {
       item.classList.add('liked');
       count.textContent = n + 1;
       heart.textContent = '♥';
+      heart.classList.add('pop');
+      setTimeout(function () { heart.classList.remove('pop'); }, 420);
     }
   };
 
-  // ---- Click comment btn -> detail
-  document.querySelectorAll('.card-footer-item').forEach((el, idx) => {
+  // Comment -> open detail + scroll to giscus
+  document.querySelectorAll('.card-footer-item').forEach(function (el) {
     if (!el.textContent.includes('💬')) return;
-    el.addEventListener('click', (e) => {
+    el.addEventListener('click', function (e) {
       e.preventDefault();
-      openDetail('cm-001');
+      if (window.openDetail) window.openDetail('cm-001');
     });
   });
 
-  // ---- Article map + detail
+  // Article data
   window.ARTICLE_MAP = {
     'cm-001': {
       title: '从牛顿第二定律到场论',
       meta: '经典力学 · 阅读 3 分钟',
-      body: '<p>这篇将从最朴素的 $F=ma$ 出发，一步步过渡到拉格朗日量与欧拉\u2013拉格朗日方程。</p>'
+      body: '<p>这篇将从最朴素的 $F=ma$ 出发，一步步过渡到拉格朗日量与欧拉–拉格朗日方程。</p>'
+          + '<div class="card-equation" data-expr="S=\\int_{t_1}^{t_2} L(q,\\dot{q},t)\\,dt"></div>'
           + '<p>原理：系统的实际运动路径，使得作用量取驻值。</p>'
           + '<p>继续阅读：单摆、双摆、刚体、到场论的构造方法。</p>'
     }
   };
   window.openDetail = function (id) {
-    const article = window.ARTICLE_MAP[id];
+    var article = window.ARTICLE_MAP[id];
     if (!article) return;
-    const titleEl = document.getElementById('detailTitle');
-    const metaEl = document.getElementById('detailMeta');
-    titleEl.textContent = article.title;
+    var titleEl = document.getElementById('detailTitle');
+    var metaEl = document.getElementById('detailMeta');
+    if (titleEl) titleEl.textContent = article.title;
     if (metaEl) metaEl.textContent = article.meta;
     document.getElementById('detailBody').innerHTML = article.body;
-    const overlay = document.getElementById('detailOverlay');
+    try {
+      if (window.renderMathInElement) renderMathInElement(document.getElementById('detailBody'), {
+        delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]
+      });
+    } catch (_) {}
+    var overlay = document.getElementById('detailOverlay');
     overlay.classList.add('show');
-    overlay.dataset.section = 'detail';
-    setTimeout(() => {
-      const mount = document.getElementById('giscus-mount');
-      if (mount) mount.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 320);
-    setTimeout(() => {
-      const frame = document.querySelector('.giscus-frame');
-      if (frame) frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(function () {
+      var mount = document.getElementById('giscus-mount');
+      if (mount) mount.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 360);
+    setTimeout(function () {
+      var frame = document.querySelector('.giscus-frame');
+      if (frame) frame.scrollIntoView({ behavior:'smooth', block:'start' });
     }, 900);
   };
+  window.closeDetail = function () {
+    document.getElementById('detailOverlay').classList.remove('show');
+  };
   if (document.getElementById('detailOverlay')) {
-    document.getElementById('detailOverlay').addEventListener('click', (e) => {
+    document.getElementById('detailOverlay').addEventListener('click', function (e) {
       if (e.target.id === 'detailOverlay') closeDetail();
     });
   }
 
-  // ---- share
+  // Share button -> copy link + alert
   window.shareArticle = async function () {
-    const url = location.href;
-    const title = document.getElementById('detailTitle')?.textContent || '';
+    var url = location.href;
     try {
-      if (navigator.share) return await navigator.share({ title, url });
-      await navigator.clipboard.writeText(url);
-      alert('链接已复制，可分享给朋友。');
-    } catch (_) { /* cancel */ }
-  };
-
-  // ---- Home cards click -> detail for cm-001 / others -> scroll
-  document.querySelectorAll('.home-cards .card').forEach((c, i) => {
-    c.addEventListener('click', (e) => {
-      if (c.getAttribute('href') === '#classical-mechanics' && c.getAttribute('data-id') === 'cm-001') {
-        e.preventDefault();
-        openDetail('cm-001');
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
       }
-    });
-  });
-
-  // ---- Giscus theme after overlay toggle
-  window.getGiscusTheme = function () {
-    const theme = document.documentElement.getAttribute('data-theme') || 'light';
-    return theme === 'dark' ? 'dark' : 'light';
+      alert('文章链接已复制，可直接粘贴分享。');
+    } catch (_) {}
   };
 });
 
-window.getGiscusTheme = function () {
-  const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  return theme === 'dark' ? 'dark' : 'light';
-};
-window.__giscus_init = function () {
-  const iframe = document.querySelector('.giscus-frame');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: window.getGiscusTheme() } } }, 'https://giscus.app');
-  }
-};
-window.addEventListener('message', (event) => {
-  if (event.origin !== 'https://giscus.app') return;
-  try { if (event.data.giscus) window.__giscus_init(); } catch (_) {}
-});
-window.addEventListener('hashchange', () => { window.__giscus_init && window.__giscus_init(); });
 </script>
+
 <script src="https://giscus.app/client.js"
         data-repo="zion000yui/physics-site"
         data-repo-id="R_kgDOTC-1Yw"
@@ -1057,3 +531,6 @@ window.addEventListener('hashchange', () => { window.__giscus_init && window.__g
         crossorigin="anonymous"
         async>
 </script>
+
+</body>
+</html>
